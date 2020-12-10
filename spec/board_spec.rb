@@ -44,8 +44,6 @@ describe Board do
    subject(:board_move_piece) { described_class.new }
    let(:knight) { Knight.new([0,1], 'white')}
    let(:board) { board_move_piece.instance_variable_get(:@board) }
-   let(:invalid_goal) { [4,4] }
-   let(:valid_goal) { [2,2] }
 
     context "when giving a Knight" do
          it "moves it to goal if move is valid" do
@@ -56,12 +54,12 @@ describe Board do
          it "puts 'Invalid move!' if move is invalid once" do 
             error_message = 'Invalid move!'
             allow(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
-            board_move_piece.move_piece(knight, invalid_goal)
-            board_move_piece.move_piece(knight, valid_goal)         
+            board_move_piece.move_piece(knight, [4,4])
+            board_move_piece.move_piece(knight, [2,2])         
         end
 
         it "resets to default the cell where the piece was" do
-          allow(board_move_piece).to receive(:move_piece).with(knight, valid_goal)
+          allow(board_move_piece).to receive(:move_piece).with(knight, [2,2])
           expect(board[0][1]).to eq('  ')
         end
     end
@@ -69,31 +67,39 @@ describe Board do
 
   describe "#get_position" do
    subject(:board_get_position) { described_class.new }
-   let(:correct_row) { 2 }
-   let(:correct_column) { 2 }
 
     context "when given correct values" do
-      xit "returns the two values in the array" do
-        allow(board_get_position).to receive(:gets).and_return(correct_row, correct_column)
+      it "returns the two values in the array" do
+        allow(board_get_position).to receive(:gets).and_return(2,2)
         expect(board_get_position).to receive(:get_position).and_return([2,2])
         board_get_position.get_position
       end
     end
 
-    context "when given wrong first value and then right" do
+    context "when given wrong first value and then right, then correct ones" do
        it "returns error message first, then values in array" do
-        first_puts = "Choose row from 0 to 7"
-        second_puts = "Now choose a column from 0 to 7"
-        wrong_input = "Input error! Choose a row and a column, from 0 to 7"
-        wrong_row = 34
-        allow(board_get_position).to receive(:gets).with(wrong_row,correct_column)
-        allow(board_get_position).to receive(:gets).with(correct_row, correct_column)
-        allow(board_get_position).to receive(:puts).with(first_puts)
-        allow(board_get_position).to receive(:puts).with(second_puts)        
-        expect(board_get_position).to receive(:puts).with(wrong_input)
+        error_message = "Input error! Choose a row and a column, from 0 to 7"
+        allow(board_get_position).to receive(:gets).with(34, 2)
+        allow(board_get_position).to receive(:gets).with(2, 2)
+        expect(board_get_position).to receive(:get_position).and_return(error_message, [2,2])
+        board_get_position.get_position
         board_get_position.get_position
         end
     end
+
+    context "when given wron values two times, then correct ones" do
+      it "returns error message twice, then values in array" do
+       error_message = "Input error! Choose a row and a column, from 0 to 7"
+       allow(board_get_position).to receive(:gets).with(34, 2)
+       allow(board_get_position).to receive(:gets).with(99999, 'aajahahha')
+       allow(board_get_position).to receive(:gets).with(2, 2)
+       expect(board_get_position).to receive(:get_position).and_return(error_message, error_message, [2,2])       
+       board_get_position.get_position
+       board_get_position.get_position
+       board_get_position.get_position
+       end
+   end
+
   end
 
 end
