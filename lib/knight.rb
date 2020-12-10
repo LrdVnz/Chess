@@ -24,10 +24,8 @@ class Knight
     end
 
     def check_move(goal)
-        puts "reaaachedddd check moveeeeeeeeuuuu"
       @list.each { |move|
            result = make_move(move, position)
-            puts "resultoo #{result}"
             return true if result == goal
      }  
     end

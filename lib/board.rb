@@ -33,7 +33,6 @@ class Board
  def move_piece(piece, goal) 
    loop do
      if piece.check_move(goal) === true
-        puts "true reeeeacccchedd!"
         @board[piece.position[0]][piece.position[1]] = ' '
         return put_piece(piece, goal[0], goal[1])
      else 
