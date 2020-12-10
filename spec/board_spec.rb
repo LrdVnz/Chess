@@ -20,26 +20,50 @@ describe Board do
 
       context "when chosen piece is Knight" do
          it "creates a new knight and calls put_piece" do
-            expect(Knight).to receive(:new).with(0, 1, 'white')
+            expect(Knight).to receive(:new).with([0,1], 'white')
             expect(board_set_piece).to receive(:put_piece)
-            board_set_piece.set_piece(Knight, 0, 1, 'white') 
+            board_set_piece.set_piece(Knight, [0,1], 'white') 
          end 
       end
   end
 
   describe "#put_piece" do
     subject(:board_put_piece) { described_class.new }
-    let(:knight) { Knight.new(0,1,'white') }
+    let(:knight) { Knight.new([0,1], 'white') }
 
-    context "when choosing a piece" do
+    context "when giving a knight" do
         it "puts it on the chosen position on the board" do
           board = board_put_piece.board
-          board_put_piece.put_piece(knight, 0, 1)
+          board_put_piece.put_piece(knight,0,1)
           expect(board[0][1]).to be_instance_of(Knight)        
         end
     end
   end
 
-  
+  describe "#move_piece" do
+   subject(:board_move_piece) { described_class.new }
+   let(:knight) { Knight.new([0,1], 'white')}
+
+    context "when giving a Knight" do
+         xit "moves it to goal if move is valid" do
+             board = board_move_piece.board
+             board_move_piece.move_piece(knight, [2,2])
+             expect(board[2][2]).to be_instance_of(Knight)
+         end
+
+         it "puts 'Invalid move!' if move is invalid once" do 
+            error_message = 'Invalid move!'
+            board = board_move_piece.board
+            invalid_goal = [4,4]
+            valid_goal = [2,2]
+            allow(board_move_piece).to receive(:move_piece).with(knight, invalid_goal)
+            # (board_move_piece).to receive(:move_piece).with(knight, valid_goal)
+            expect(board_move_piece).to receive(:puts).with(error_message)
+           # board_move_piece.move_piece(knight, invalid_goal)
+            board_move_piece.move_piece(knight, valid_goal )   
+        end
+
+    end
+  end
 
 end
