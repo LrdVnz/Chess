@@ -43,22 +43,26 @@ describe Board do
   describe "#move_piece" do
    subject(:board_move_piece) { described_class.new }
    let(:knight) { Knight.new([0,1], 'white')}
+   let(:board) { board_move_piece.instance_variable_get(:@board) }
+   let(:invalid_goal) { [4,4] }
+   let(:valid_goal) { [2,2] }
 
     context "when giving a Knight" do
          it "moves it to goal if move is valid" do
-             board = board_move_piece.board
              board_move_piece.move_piece(knight, [2,2])
              expect(board[2][2]).to be_instance_of(Knight)
          end
 
          it "puts 'Invalid move!' if move is invalid once" do 
             error_message = 'Invalid move!'
-            board = board_move_piece.board
-            invalid_goal = [4,4]
-            valid_goal = [2,2]
             allow(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
             board_move_piece.move_piece(knight, invalid_goal)
             board_move_piece.move_piece(knight, valid_goal)         
+        end
+
+        it "resets to default the cell where the piece was" do
+          allow(board_move_piece).to receive(:move_piece).with(knight, valid_goal)
+          expect(board[0][1]).to eq('  ')
         end
     end
   end
@@ -77,7 +81,7 @@ describe Board do
     end
 
     context "when given wrong first value and then right" do
-        xit "returns error message first, then values in array" do
+       it "returns error message first, then values in array" do
         first_puts = "Choose row from 0 to 7"
         second_puts = "Now choose a column from 0 to 7"
         wrong_input = "Input error! Choose a row and a column, from 0 to 7"
