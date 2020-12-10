@@ -20,6 +20,7 @@ class Board
  
  def put_piece(piece, row, column) 
     @board[row][column] = piece
+
  end
 
  def make_move
