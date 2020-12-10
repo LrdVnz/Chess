@@ -7,7 +7,7 @@ class Board
   @board = create_board
  end
 
- def create_board
+ def create_board 
   b = []
   8.times { b << Array.new(8, '  ') }
   b
@@ -20,7 +20,6 @@ class Board
  
  def put_piece(piece, row, column) 
     @board[row][column] = piece
-
  end
 
  def make_move

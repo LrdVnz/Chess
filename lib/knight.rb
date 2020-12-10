@@ -8,12 +8,12 @@ class Knight
     def initialize(position, color)  
       @color = color
       @position = position
-      set_list
+      set_movelist
     end
      #search if its possible to have put_on_board in the knight class <--- overcomplicated and unnecessary ?
 
      def set_list
-     @list = [
+     @movelist = [
         [-2, -1],
         [-2, +1],
         [+2, +1],
@@ -27,7 +27,7 @@ class Knight
 
     def check_move(goal)
       is_valid = false
-      @list.each { |move|
+      @movelist.each { |move|
            result = make_move(move, position)
             return is_valid = true if result == goal
      }  
