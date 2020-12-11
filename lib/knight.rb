@@ -6,8 +6,8 @@ class Knight
     attr_reader :color , :position
 
     def initialize(position, color)  
-      @color = color
       @position = position
+      @color = color
       set_movelist
     end
      #search if its possible to have put_on_board in the knight class <--- overcomplicated and unnecessary ?

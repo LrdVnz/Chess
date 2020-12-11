@@ -1,4 +1,5 @@
 require './lib/knight.rb'
+require_relative 'board_spec.rb'
 
 describe Knight do
    

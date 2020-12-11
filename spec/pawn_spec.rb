@@ -1,4 +1,5 @@
 require './lib/pawn.rb'
+require_relative 'board_spec.rb'
 
 describe Pawn do 
 #please don't hurt me I'm just a little Pawn..
@@ -22,6 +23,5 @@ describe Pawn do
       end
     end
   end
-
 
 end

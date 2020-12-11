@@ -39,7 +39,8 @@ describe Board do
         end
     end
   end
-
+  
+  
   describe "#move_piece" do
    subject(:board_move_piece) { described_class.new }
    let(:board) { board_move_piece.instance_variable_get(:@board) }
@@ -85,8 +86,6 @@ describe Board do
        expect(board[0][1]).to eq('  ')
       end
     end
-
-
   end
 
   describe "#get_position" do
