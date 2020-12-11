@@ -2,10 +2,10 @@
 
 require_relative 'pieces_helpers'
 
-# class for the rook piece. Holds position, movement, color
-class Rook
+# class for the queen piece. Holds position, movement, color
+class Queen
   include Helpers
-  attr_reader :move, :color
+  attr_reader :moves, :color
   attr_accessor :position
 
   def initialize(position, color)
@@ -19,7 +19,11 @@ class Rook
       [(0..7).to_a, Array.new(8, 0)],
       [(-7..0).to_a, Array.new(8, 0)],
       [Array.new(8, 0), (0..+7).to_a],
-      [Array.new(8, 0), (-7..0).to_a]
+      [Array.new(8, 0), (-7..0).to_a],
+      [(0..7).to_a, (0..7).to_a],
+      [(-7..0).to_a, (-7..0).to_a],
+      [(-7..0).to_a, (0..7).to_a.reverse],
+      [(0..7).to_a.reverse, (-7..0).to_a]
     ]
   end
 

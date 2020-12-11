@@ -1,27 +1,29 @@
-require_relative 'pieces_helpers.rb'
+# frozen_string_literal: true
 
-class Pawn 
-    include Helpers
-     attr_reader :move, :color
-     attr_accessor :position
+require_relative 'pieces_helpers'
 
-    def initialize(position, color) 
-     @position = position
-     @color = color
-     set_movelist
-    end
+# class for the pawn piece. Holds position, movement, color
+class Pawn
+  include Helpers
+  attr_reader :move, :color
+  attr_accessor :position
 
-    def set_movelist
-      @move = [+1, 0]
-      @first_move = [+2, 0]
-    end
+  def initialize(position, color)
+    @position = position
+    @color = color
+    set_movelist
+  end
 
-    def check_move(goal)
-      #if turn == 1 add first move as option
-          result = make_move(move, position)
-          return true if result == goal
-          return false
-    end
-      
+  def set_movelist
+    @move = [+1, 0]
+    @first_move = [+2, 0]
+  end
 
+  def check_move(goal)
+    # if turn == 1 add first move as option
+    result = make_move(move, position)
+    return true if result == goal
+
+    false
+  end
 end
