@@ -42,10 +42,10 @@ describe Board do
 
   describe "#move_piece" do
    subject(:board_move_piece) { described_class.new }
-   let(:knight) { Knight.new([0,1], 'white')}
    let(:board) { board_move_piece.instance_variable_get(:@board) }
 
     context "when giving a Knight" do
+    let(:knight) { Knight.new([0,1], 'white')}
          it "moves it to goal if move is valid" do
              board_move_piece.move_piece(knight, [2,2])
              expect(board[2][2]).to be_instance_of(Knight)
@@ -63,6 +63,30 @@ describe Board do
           expect(board[0][1]).to eq('  ')
         end
     end
+    
+    #take a look at shared examples 
+    context "when giving a pawn" do
+    let(:pawn) { Pawn.new([1,1], 'white') } 
+
+      it "moves it to goal if move is valid" do
+          board_move_piece.move_piece(pawn, [2,1])
+          expect(board[2][1]).to be_instance_of(Pawn)
+      end
+
+      it "puts 'Invalid move!' if move is invalid once" do 
+         error_message = 'Invalid move!'
+         allow(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
+         board_move_piece.move_piece(pawn, [4,4])
+         board_move_piece.move_piece(pawn, [2,1])         
+      end
+
+      it "resets to default the cell where the piece was" do
+       allow(board_move_piece).to receive(:move_piece).with(pawn, [2,1])
+       expect(board[0][1]).to eq('  ')
+      end
+    end
+
+
   end
 
   describe "#get_position" do
