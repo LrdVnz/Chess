@@ -9,14 +9,14 @@ describe Knight do
     
     describe "#check_move" do #maybe it will be a method shared and tested between all the pieces ? 
       subject(:knight_check) { described_class.new([0,6], 'white')}
-
+      let(:board) { Board.new.board }
         context "when the player inputs valid goal" do
             it "returns true if the move is possible" do
-              expect(knight_check.check_move([2,5])).to be(true)
+              expect(knight_check.check_move([2,5], board)).to be(true)
             end
 
             it "returns nil if move is not possible" do
-                expect(knight_check.check_move([3,5])).to be(false)
+                expect(knight_check.check_move([3,5], board)).to be(false)
             end
         end
     end

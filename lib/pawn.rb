@@ -19,10 +19,11 @@ class Pawn
     @first_move = [+2, 0]
   end
 
-  def check_move(goal)
+  def check_move(goal, board)
     # if turn == 1 add first move as option
     result = make_move(move, position)
-    return true if result == goal
+    return true if result == goal && board[goal[0]][goal[1]] == ' '
+    return true if result == goal && board[goal[0]][goal[1]].color != color
 
     false
   end

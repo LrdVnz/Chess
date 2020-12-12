@@ -40,13 +40,14 @@ describe Board do
     end
   end
   
-  
+  # shared examples with parameters ?? 
   describe "#move_piece" do
    subject(:board_move_piece) { described_class.new }
    let(:board) { board_move_piece.instance_variable_get(:@board) }
 
     context "when giving a Knight" do
     let(:knight) { Knight.new([0,1], 'white')}
+
          it "moves it to goal if move is valid" do
              board_move_piece.move_piece(knight, [2,2])
              expect(board[2][2]).to be_instance_of(Knight)
@@ -61,13 +62,53 @@ describe Board do
 
         it "resets to default the cell where the piece was" do
           allow(board_move_piece).to receive(:move_piece).with(knight, [2,2])
-          expect(board[0][1]).to eq('  ')
+          expect(board[0][1]).to eq(' ')
         end
     end
-    
+
+    context "when given a cell occupied by a piece of the same color" do
+    let(:knight) { Knight.new([3,3], 'white') }
+    let(:pawn) { Pawn.new([2,3], 'white') } 
+
+      it "puts 'Invalid move!' once " do
+        board[3][3] = knight 
+        board[2][3] = pawn
+        expect(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
+        board_move_piece.move_piece(pawn, [2,3])
+        board_move_piece.move_piece(knight, [5,2])
+      end
+    end
+
+    context "when given a cell occupied by a piece of another color" do
+      let(:knight) { Knight.new([3,3], 'black') }
+      let(:pawn) { Pawn.new([2,3], 'white') } 
+  
+        it "Moves it to the cell" do
+          board[3][3] = knight 
+          board[2][3] = pawn
+          expect(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
+          board_move_piece.move_piece(pawn, [2,3])
+          board_move_piece.move_piece(knight, [5,2])
+        end
+      end
+      
+    context "when given a cell where the path is occupied" do
+      let(:knight) { Knight.new([3,3], 'white') }
+      let(:bishop) { Bishop.new([2,2], 'black') } 
+  
+        it "moves it to the cell" do
+          board[3][3] = knight 
+          board[2][2] = bishop 
+          expect(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
+          board_move_piece.move_piece(bishop, [6,6])
+          board_move_piece.move_piece(knight, [5,2])
+        end
+      end
+
     #take a look at shared examples 
     context "when giving a pawn" do
     let(:pawn) { Pawn.new([1,1], 'white') } 
+    let(:bishop) { Bishop.new([2,1], 'white')}
 
       it "moves it to goal if move is valid" do
           board_move_piece.move_piece(pawn, [2,1])
@@ -80,10 +121,18 @@ describe Board do
          board_move_piece.move_piece(pawn, [4,4])
          board_move_piece.move_piece(pawn, [2,1])         
       end
+        
+      it "puts 'Invalid move!' if goal cell is occupied by same color piece" do
+         error_message = 'Invalid move!'
+         board[2][1] = bishop
+         allow(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
+         board_move_piece.move_piece(pawn, [2,1])
+         board_move_piece.move_piece(bishop, [4,3])         
+      end
 
       it "resets to default the cell where the piece was" do
        allow(board_move_piece).to receive(:move_piece).with(pawn, [2,1])
-       expect(board[0][1]).to eq('  ')
+       expect(board[0][1]).to eq(' ')
       end
     end
   end

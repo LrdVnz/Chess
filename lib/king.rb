@@ -23,10 +23,12 @@ class King
     ]
   end
 
-  def check_move(goal)
+  def check_move(goal, board)
     is_valid = false
     moves.each do |move|
-      return is_valid = true if make_move(move, position) == goal
+      result = make_move(move, position)
+      return is_valid = true if result == goal && board[result[0]][result[1]] == ' '
+      return is_valid = true if result == goal && board[result[0]][result[1]].color != color
     end
     is_valid
   end

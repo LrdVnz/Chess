@@ -11,7 +11,7 @@ class Board
 
   def create_board
     b = []
-    8.times { b << Array.new(8, '  ') }
+    8.times { b << Array.new(8, ' ') }
     b
   end
 
@@ -28,13 +28,14 @@ class Board
     puts 'Choose the piece by putting the row and column where it is located'
     pos = get_position
     piece = @board[pos[0]][pos[1]]
-    goal = get_goal
+    puts "piece #{piece}"
+    goal = get_position
     move_piece(piece, goal)
   end
 
   def move_piece(piece, goal)
     loop do
-      if piece.check_move(goal) == true
+      if piece.check_move(goal, board) == true
         @board[piece.position[0]][piece.position[1]] = ' '
         return put_piece(piece, goal[0], goal[1])
       else
@@ -50,8 +51,8 @@ class Board
       puts 'Now choose a column from 0 to 7'
       input2 = gets.chomp
       if input.match(/[0-7]/) && input2.match(/[0-7]/)
-        first = input
-        second = input2
+        first = input.to_i
+        second = input2.to_i
         return [first, second]
       else
         puts 'Input error! Choose a row and a column, from 0 to 7'
@@ -60,8 +61,17 @@ class Board
   end
 
   def showboard
-    board.each { |row| puts "#{row} \n" }
+    board.each do |row|
+      row.each do |tile|
+        print "[ #{tile} ]"
+      end
+      puts "\n ---------------------------------------"
+    end
   end
 end
 
-
+# b = Board.new
+# b.set_piece(Knight, [0,2], 'black')
+# b.showboard
+# b.make_move
+# b.showboard
