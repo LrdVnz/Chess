@@ -94,13 +94,13 @@ describe Board do
       
     context "when given a cell where the path is occupied" do
       let(:knight) { Knight.new([3,3], 'white') }
-      let(:bishop) { Bishop.new([2,2], 'black') } 
+      let(:rook) { Rook.new([2,2], 'black') } 
   
         it "moves it to the cell" do
           board[3][3] = knight 
-          board[2][2] = bishop 
+          board[2][3] = rook 
           expect(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
-          board_move_piece.move_piece(bishop, [6,6])
+          board_move_piece.move_piece(rook, [5,3])
           board_move_piece.move_piece(knight, [5,2])
         end
       end
