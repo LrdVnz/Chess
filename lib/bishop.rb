@@ -30,6 +30,7 @@ class Bishop
       while i < 8
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move, position)
+      #  return is_valid = false if !result.nil?
         return is_valid = true if result == goal && board[result[0]][result[1]] == ' '
         return is_valid = true if result == goal && board[result[0]][result[1]].color != color
 

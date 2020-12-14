@@ -30,7 +30,7 @@ class Rook
       while i < 8
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move, position)
-        return is_valid = false if !result.nil? && check_path(result, board)
+      #  return is_valid = false if !result.nil? && check_path(result, board)
         return is_valid = true if result == goal && board[result[0]][result[1]] == ' '
         return is_valid = true if result == goal && board[result[0]][result[1]].color != self.color
 
@@ -46,7 +46,7 @@ class Rook
     pos_y = position[1]
     result_y = position[1]
     
-    path = ( ( (position[0])..(result[0]) ).to_a, ( (position[1])..(result[1]) ).to_a )
+    path = (pos_x..result_x).to_a, (pos_y..result_y).to_a 
     
     path[0].each { |row|
       path[1].each { |column|
