@@ -14,7 +14,6 @@ class Knight
     set_movelist
     set_image
   end
-  # search if its possible to have put_on_board in the knight class <--- overcomplicated and unnecessary ?
 
   def set_image
     case @color
@@ -46,8 +45,8 @@ class Knight
     is_valid = false
     @movelist.each do |move|
       result = make_move(move, position)
-      return is_valid = true if result == goal && board[result[0]][result[1]] == ' '
-      return is_valid = true if result == goal && board[result[0]][result[1]].color != color
+      pos_goal = board[result[0]][result[1]] if !result.nil?
+      return is_valid = true if result == goal && ( pos_goal == ' ' || pos_goal.color != color)
     end
     is_valid
   end

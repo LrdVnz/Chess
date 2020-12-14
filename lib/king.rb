@@ -27,8 +27,8 @@ class King
     is_valid = false
     moves.each do |move|
       result = make_move(move, position)
-      return is_valid = true if result == goal && board[result[0]][result[1]] == ' '
-      return is_valid = true if result == goal && board[result[0]][result[1]].color != color
+      pos_goal = board[result[0]][result[1]] if !result.nil?
+      return is_valid = true if result == goal && ( pos_goal == ' ' || pos_goal.color != color)
     end
     is_valid
   end

@@ -1,5 +1,6 @@
 require './lib/board.rb'
- 
+require './lib/pawn.rb'
+
  RSpec.shared_examples "move_piece_shared" do
     let(:board_shared_ex) { Board.new }
     let(:board) { board_shared_ex.board }
@@ -27,28 +28,42 @@ require './lib/board.rb'
           board_shared_ex.move_piece(current_class, valid_goal)  
          end
        end
+
+        context "when given a cell occupied by a piece of another color" do
+         let(:pawn) { Pawn.new([2,3], 'black') } 
+  
+          it "Moves it to the cell" do
+            board[3][3] = current_class
+            board[2][3] = pawn
+            expect(board_shared_ex.move_piece(pawn, [3,3])).to be(pawn)
+          end
+      end
   end
 
-=begin
-  
-    context "when given a cell occupied by a piece of another color" do
-      let(:knight) { Knight.new([3,3], 'black') }
-      let(:pawn) { Pawn.new([2,3], 'white') } 
-  
-        it "Moves it to the cell" do
-          board[3][3] = knight 
-          board[2][3] = pawn
-          expect(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)
-          board_move_piece.move_piece(pawn, [2,3])
-          board_move_piece.move_piece(knight, [5,2])
-        end
+RSpec.shared_examples "move_piece_occupied_path" do
+  let(:board_second_shared) { Board.new }
+  let(:board) { board_second_shared.board }
+      
+  context "when given a cell where the path is occupied" do
+    let(:pawn) { Pawn.new([2,2], 'white') } 
+
+      it "puts error" do
+        board[1][2] = current_class 
+        board[2][2] = pawn 
+        expect(board_second_shared).to receive(:move_piece).and_return(:puts, :put_piece)
+        board_second_shared.move_piece(current_class, invalid_goal)
+      #  board_move_piece.move_piece(current_class, valid_goal)        
       end
+    end  
+end
+
+=begin
 
        context "when given a cell where the path is occupied" do
       let(:knight) { Knight.new([3,3], 'white') }
-      let(:rook) { Rook.new([2,2], 'black') } 
+      let(:rook) { Rook.new([2,2], 'white') } 
   
-        it "moves it to the cell" do
+        it "puts error" do
           board[3][3] = knight 
           board[2][3] = rook 
           expect(board_move_piece).to receive(:move_piece).and_return(:puts, :put_piece)

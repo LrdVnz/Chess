@@ -22,8 +22,8 @@ class Pawn
   def check_move(goal, board)
     # if turn == 1 add first move as option
     result = make_move(move, position)
-    return true if result == goal && board[goal[0]][goal[1]] == ' '
-    return true if result == goal && board[goal[0]][goal[1]].color != color
+    pos_goal = board[result[0]][result[1]] if !result.nil?
+    return true if result == goal && ( pos_goal == ' ' || pos_goal.color != color)
 
     false
   end

@@ -7,7 +7,7 @@ describe Board do
 
     context "when creating the board" do
        it "should create 8 x 8 board" do
-         board = board_new.board
+          board = board_new.board
           expect(board).to be_instance_of(Array)
           expect(board.length).to eq(8)
           expect(board.all? {|row| row.length == 8}).to be(true)
@@ -74,7 +74,5 @@ describe Board do
        board_get_position.get_position
        end
    end
-
   end
-
 end
