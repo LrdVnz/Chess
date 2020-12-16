@@ -11,16 +11,30 @@ class Rook
   def initialize(position, color)
     @position = position
     @color = color
-    set_movelist
+    movelist
+    image
   end
 
-  def set_movelist
+  def movelist
     @moves = [
       [(0..7).to_a, Array.new(8, 0)],
       [(-7..0).to_a, Array.new(8, 0)],
       [Array.new(8, 0), (0..+7).to_a],
       [Array.new(8, 0), (-7..0).to_a]
     ]
+  end
+
+  def to_s
+    image
+  end
+
+  def image
+   case color
+   when 'white'
+     @image = '♖'
+   when 'black'
+     @image = '♜' 
+   end
   end
 
   def check_move(goal, board)
@@ -30,13 +44,18 @@ class Rook
       while i < 8
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move, position)
-        pos_goal = board[result[0]][result[1]] if !result.nil?
-        if result == goal && ( pos_goal == ' ' || pos_goal.color != color)
-          a = check_path(result,board,new_move)
-          return false if a == false
-          return is_valid = true 
+        if !result.nil? 
+          x = result[0]
+          y = result[1]
+          pos_goal = board[x][y]
         end
-
+        if result == goal
+         if pos_goal == ' ' || pos_goal.color != color
+          a = check_path(result,board,new_move)
+          return is_valid = false if a == false
+          return is_valid = true 
+         end
+        end
         i += 1
       end
     end
@@ -44,7 +63,6 @@ class Rook
   end
 
   def check_path(result, board, move)
-      puts "move #{move}"
       i = move[0]
       j = move[1]
       clear = true

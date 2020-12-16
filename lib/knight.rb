@@ -11,11 +11,11 @@ class Knight
   def initialize(position, color)
     @position = position
     @color = color
-    set_movelist
-    set_image
+    movelist
+    image
   end
 
-  def set_image
+  def image
     case @color
     when 'white'
       @image = '♘'
@@ -28,7 +28,7 @@ class Knight
     image
   end
 
-  def set_movelist
+  def movelist
     @movelist = [
       [-2, -1],
       [-2, +1],

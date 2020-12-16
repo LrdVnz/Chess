@@ -11,10 +11,24 @@ class Bishop
   def initialize(position, color)
     @position = position
     @color = color
-    set_movelist
+    movelist
+    image
   end
 
-  def set_movelist
+  def to_s
+    image
+  end
+
+  def image 
+     case color
+     when 'white'
+       @image = '♗'
+     when 'black'
+       @image = '♝'
+     end
+  end
+
+  def movelist
     @moves = [
       [(0..7).to_a, (0..7).to_a],
       [(-7..0).to_a, (-7..0).to_a],

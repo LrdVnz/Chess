@@ -6,22 +6,21 @@ require './lib/pawn.rb'
     let(:board) { board_shared_ex.board }
       
        context "when giving a valid goal for the piece" do
-          it "moves piece to the goal" do
+        xit "moves piece to the goal" do
             board_shared_ex.move_piece(current_class, valid_goal)
             expect(board[valid_goal[0]][valid_goal[1]]).to be(current_class)  
         end
 
-        it "resets to default the cell where the piece was" do
+        xit "resets to default the cell where the piece was" do
           pos_x = current_class.position[0]
           pos_y = current_class.position[1]          
           allow(board_shared_ex).to receive(:move_piece).with(current_class, valid_goal)
           expect(board[pos_x][pos_y]).to eq(' ')
         end
-
     end
 
        context "when giving an invalid goal once" do
-         it "puts 'Input error!' once" do
+         xit "puts 'Input error!' once" do
           error_message = 'Invalid move!'
           allow(board_shared_ex).to receive(:move_piece).and_return(:puts, :put_piece)
           board_shared_ex.move_piece(current_class, invalid_goal)
@@ -30,12 +29,15 @@ require './lib/pawn.rb'
        end
 
         context "when given a cell occupied by a piece of another color" do
-         let(:pawn) { Pawn.new([2,3], 'black') } 
+         let(:pawn) { Pawn.new([1,0], 'black') } 
   
-          it "Moves it to the cell" do
-            board[3][3] = current_class
-            board[2][3] = pawn
-            expect(board_shared_ex.move_piece(pawn, [3,3])).to be(pawn)
+          xit "Moves it to the cell" do
+            start_x = current_class.position[0]
+            start_y = current_class.position[1]
+            board[start_x][start_y] = current_class
+            board[1][0] = pawn
+            board_shared_ex.move_piece(pawn, [start_x, start_y])
+            expect(board[start_x][start_y]).to be(pawn)
           end
       end
   end
@@ -44,17 +46,37 @@ RSpec.shared_examples "move_piece_occupied_path" do
   let(:board_second_shared) { Board.new }
   let(:board) { board_second_shared.board }
       
-  context "when given a cell where the path is occupied" do
+  context "when given a cell that is occupied" do
     let(:pawn) { Pawn.new([2,2], 'white') } 
 
-      it "puts error" do
-        board[1][2] = current_class 
+      xit "puts error" do
+        x = current_class.position[0]
+        y = current_class.position[1]
+        board[x][y] = current_class 
         board[2][2] = pawn 
         expect(board_second_shared).to receive(:move_piece).and_return(:puts, :put_piece)
         board_second_shared.move_piece(current_class, invalid_goal)
-      #  board_move_piece.move_piece(current_class, valid_goal)        
+        board_second_shared.move_piece(current_class, valid_goal)        
       end
     end  
+    
+    context "when given a cell where the path is occupied" do
+      let(:pawn) { Pawn.new([3,2], 'white') }
+  
+        it "puts error" do
+          x = current_class.position[0]
+          y = current_class.position[1]
+          puts "x aaaand yyyy #{x} #{y}"
+          error_message = 'Invalid move!'
+          invalid_input = [5,2]
+          valid_input = [2,2]
+          board[x][y] = current_class
+          board[3][2] = pawn 
+          expect(board_second_shared).to receive(:move_piece).and_return(:puts).with(error_message).once
+          board_second_shared.move_piece(current_class, invalid_input)
+          board_second_shared.move_piece(current_class, valid_input)
+          end
+      end
 end
 
 =begin

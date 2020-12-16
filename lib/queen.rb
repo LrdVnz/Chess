@@ -11,10 +11,24 @@ class Queen
   def initialize(position, color)
     @position = position
     @color = color
-    set_movelist
+    movelist
+    image 
   end
 
-  def set_movelist
+  def image 
+    case color
+    when 'white'
+      @image = '♕'
+    when 'black'
+      @image = '♛'
+    end
+  end
+
+  def to_s
+    image
+  end
+
+  def movelist
     @moves = [
       [(0..7).to_a, Array.new(8, 0)],
       [(-7..0).to_a, Array.new(8, 0)],

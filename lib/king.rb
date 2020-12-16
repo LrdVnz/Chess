@@ -11,10 +11,24 @@ class King
   def initialize(position, color)
     @position = position
     @color = color
-    set_movelist
+    movelist
+    image
   end
 
-  def set_movelist
+  def to_s
+    image
+  end
+
+  def image
+   case color
+   when 'white'
+     @image = '♔'
+   when 'black'
+     @image = '♚'
+   end
+  end
+
+  def movelist
     @moves = [
       [1, 0],
       [-1, 0],

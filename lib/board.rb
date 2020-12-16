@@ -70,8 +70,10 @@ class Board
   end
 end
 
-# b = Board.new
-# b.set_piece(Knight, [0,2], 'black')
-# b.showboard
-# b.make_move
-# b.showboard
+=begin
+b = Board.new
+b.set_piece(Knight, [0,2], 'black')
+b.showboard
+b.make_move
+b.showboard
+=end
