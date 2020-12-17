@@ -1,5 +1,5 @@
 require './lib/pawn.rb'
-require_relative 'shared_examples_spec.rb'
+require_relative 'shared_examples.rb'
 
 describe Pawn do
   # please don't hurt me I'm just a little Pawn..

@@ -9,12 +9,12 @@ module Helpers
     end
   end
 
-  def make_move(move, pos)
-    return nil if check_limits(move, pos)
+  def make_move(move)
+    return nil if check_limits(move, position)
 
     result = []
-    result[0] = pos[0] + move[0]
-    result[1] = pos[1] + move[1]
+    result[0] = position[0] + move[0]
+    result[1] = position[1] + move[1]
     result
   end
 

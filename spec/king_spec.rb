@@ -1,5 +1,5 @@
 require './lib/king.rb'
-require_relative 'shared_examples_spec.rb'
+require_relative 'shared_examples.rb'
 
 describe King do
   describe "#check_move" do

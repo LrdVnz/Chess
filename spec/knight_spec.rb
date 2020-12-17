@@ -1,5 +1,5 @@
 require './lib/knight.rb'
-require_relative 'shared_examples_spec.rb'
+require_relative 'shared_examples.rb'
 
 describe Knight do
   describe "#initialize" do

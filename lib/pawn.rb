@@ -21,7 +21,7 @@ class Pawn
   end
 
   def image
-    case color 
+    case color
     when 'white'
       @image = '♙'
     when 'black'
@@ -38,6 +38,7 @@ class Pawn
     result = make_move(move, position)
     pos_goal = board[result[0]][result[1]] if !result.nil?
     return true if result == goal && (pos_goal == ' ' || pos_goal.color != self.color)
+
     false
   end
 end

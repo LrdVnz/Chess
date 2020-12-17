@@ -43,11 +43,11 @@ require './lib/pawn.rb'
   end
 
 RSpec.shared_examples "move_piece_occupied_path" do
-  let(:board_second_shared) { Board.new }
-  let(:board) { board_second_shared.board }
       
   context "when given a cell that is occupied" do
-    let(:pawn) { Pawn.new([2,2], 'white') } 
+    board_second_shared = Board.new
+    pawn = Pawn.new([2,2], 'white')
+    board = board_second_shared.board
 
       xit "puts error" do
         x = current_class.position[0]
@@ -56,25 +56,25 @@ RSpec.shared_examples "move_piece_occupied_path" do
         board[2][2] = pawn 
         expect(board_second_shared).to receive(:move_piece).and_return(:puts, :put_piece)
         board_second_shared.move_piece(current_class, invalid_goal)
-        board_second_shared.move_piece(current_class, valid_goal)        
+        board_second_shared.move_piece(current_class, valid_goal)      
       end
     end  
     
     context "when given a cell where the path is occupied" do
-      let(:pawn) { Pawn.new([3,2], 'white') }
-  
+      board_second_shared = Board.new
+      pawn =  Pawn.new([3,2], 'white')
+      board = board_second_shared.board 
+      error_message = 'Invalid move!'
+
         it "puts error" do
           x = current_class.position[0]
           y = current_class.position[1]
-          puts "x aaaand yyyy #{x} #{y}"
-          error_message = 'Invalid move!'
-          invalid_input = [5,2]
-          valid_input = [2,2]
           board[x][y] = current_class
           board[3][2] = pawn 
-          expect(board_second_shared).to receive(:move_piece).and_return(:puts).with(error_message).once
-          board_second_shared.move_piece(current_class, invalid_input)
-          board_second_shared.move_piece(current_class, valid_input)
+          #allow(board_second_shared).to receive(:check_move).and_return(false, true)
+          expect(board_second_shared).to receive(:insert_piece)
+         # board_second_shared.move_piece(current_class, invalid_goal)
+          board_second_shared.move_piece(current_class, valid_goal)
           end
       end
 end

@@ -1,5 +1,5 @@
 require './lib/rook.rb'
-require_relative 'shared_examples_spec.rb'
+require_relative 'shared_examples.rb'
 
 describe Rook do
   describe "#initialize" do
@@ -11,17 +11,17 @@ describe Rook do
     let(:board) { Board.new.board }
 
     context "when given a valid goal" do
-      it "returns true" do
+      xit "returns true" do
         expect(tower_check.check_move([4, 0], board)).to be(true)
       end
 
-      it "returns true" do
+      xit "returns true" do
         expect(tower_check.check_move([0, 7], board)).to be(true)
       end
     end
 
     context "when given an invalid goal" do
-      it "returns false" do
+      xit "returns false" do
         expect(tower_check.check_move([4, 4], board)).to be(false)
       end
     end
@@ -38,8 +38,8 @@ describe Rook do
     context "shared example second" do
       include_examples "move_piece_occupied_path" do
         let(:current_class) { Rook.new([1,2],'white') }
-        let(:invalid_goal) { [4, 2] }
-        let(:valid_goal) { [1, 4]}
+        let(:invalid_goal) { [7, 2] }
+        let(:valid_goal) { [1, 5] }
       end
     end
 

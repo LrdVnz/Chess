@@ -29,12 +29,12 @@ class Rook
   end
 
   def image
-   case color
-   when 'white'
-     @image = '♖'
-   when 'black'
-     @image = '♜' 
-   end
+    case color
+    when 'white'
+      @image = '♖'
+    when 'black'
+      @image = '♜'
+    end
   end
 
   def check_move(goal, board)
@@ -43,18 +43,15 @@ class Rook
       i = 0
       while i < 8
         new_move = [move[0][i], move[1][i]]
-        result = make_move(new_move, position)
-        if !result.nil? 
-          x = result[0]
-          y = result[1]
-          pos_goal = board[x][y]
-        end
+        result = make_move(new_move)
+        move_cell = goal_cell(result, board) unless result.nil?
         if result == goal
-         if pos_goal == ' ' || pos_goal.color != color
-          a = check_path(result,board,new_move)
-          return is_valid = false if a == false
-          return is_valid = true 
-         end
+          if move_cell == ' ' || move_cell.color != color
+            a = check_path(result, board)
+            #return is_valid = false if a == false
+
+            return is_valid = true
+          end
         end
         i += 1
       end
@@ -62,20 +59,26 @@ class Rook
     is_valid
   end
 
-  def check_path(result, board, move)
-      i = move[0]
-      j = move[1]
-      clear = true
-      if i > position[0]
-        i.downto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
-      elsif i < position[0]
-        i.upto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
-     end
-      if j > position[0]
-        j.downto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
-       elsif j < position[0]
-        j.upto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
-       end
-     clear
+  def goal_cell(result, board)
+    x = result[0]
+    y = result[1]
+    board[x][y]
+  end
+
+  def check_path(result, board)
+    i = result[0]
+    j = result[1]
+    clear = true
+    if i > position[0]
+      i.downto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
+    elsif i < position[0]
+      i.upto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
+    end
+    if j > position[0]
+      j.downto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
+    elsif j < position[0]
+      j.upto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
+    end
+    clear
   end
 end

@@ -1,5 +1,5 @@
 require './lib/queen.rb'
-require_relative 'shared_examples_spec.rb'
+require_relative 'shared_examples.rb'
 
 describe Queen do
   describe "#check_move" do

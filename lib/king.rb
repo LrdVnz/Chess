@@ -20,12 +20,12 @@ class King
   end
 
   def image
-   case color
-   when 'white'
-     @image = '♔'
-   when 'black'
-     @image = '♚'
-   end
+    case color
+    when 'white'
+      @image = '♔'
+    when 'black'
+      @image = '♚'
+    end
   end
 
   def movelist
@@ -42,7 +42,7 @@ class King
     moves.each do |move|
       result = make_move(move, position)
       pos_goal = board[result[0]][result[1]] if !result.nil?
-      return is_valid = true if result == goal && ( pos_goal == ' ' || pos_goal.color != color)
+      return is_valid = true if result == goal && (pos_goal == ' ' || pos_goal.color != color)
     end
     is_valid
   end
