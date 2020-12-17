@@ -29,8 +29,8 @@ describe Queen do
 
   context "shared_example" do
     include_examples 'move_piece_shared' do 
-     let(:current_class) { Queen.new([2,2],'white') }
-     let(:valid_goal) { [7, 2] }
+     let(:current_class) { Queen.new([2,0],'white') }
+     let(:valid_goal) { [6, 4] }
      let(:invalid_goal) { ['aaa','eeeffff'] }
     end
   end

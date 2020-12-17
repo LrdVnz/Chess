@@ -44,9 +44,13 @@ class Knight
   def check_move(goal, board)
     is_valid = false
     @movelist.each do |move|
-      result = make_move(move, position)
-      pos_goal = board[result[0]][result[1]] if !result.nil?
-      return is_valid = true if result == goal && (pos_goal == ' ' || pos_goal.color != color)
+      result = make_move(move)
+      move_cell = board[result[0]][result[1]] if !result.nil?
+      if result == goal
+        if move_cell == ' ' || move_cell.color != color
+          return is_valid = true
+        end
+      end
     end
     is_valid
   end

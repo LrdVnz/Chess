@@ -46,10 +46,8 @@ class Board
     loop do
       if piece.check_move(goal, board) == true
         reset_cell(piece.position)
-        print "its true muhnigg"
         return insert_piece(piece, goal[0], goal[1])
       else
-        print "nah falllseeee bittthchchch"
         puts 'Invalid move!'
       end
     end

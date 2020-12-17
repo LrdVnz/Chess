@@ -48,7 +48,7 @@ class Rook
         if result == goal
           if move_cell == ' ' || move_cell.color != color
             a = check_path(result, board)
-            #return is_valid = false if a == false
+            return is_valid = false if a == false
 
             return is_valid = true
           end

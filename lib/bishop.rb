@@ -45,7 +45,14 @@ class Bishop
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move, position)
         pos_goal = board[result[0]][result[1]] if !result.nil?
-        return is_valid = true if result == goal && (pos_goal == ' ' || pos_goal.color != color)
+        if result == goal
+          if move_cell == ' ' || move_cell.color != color
+            a = check_path(result, board)
+            return is_valid = false if a == false
+
+            return is_valid = true
+          end
+        end
 
         i += 1
       end

@@ -40,9 +40,11 @@ class King
   def check_move(goal, board)
     is_valid = false
     moves.each do |move|
-      result = make_move(move, position)
+      result = make_move(move)
       pos_goal = board[result[0]][result[1]] if !result.nil?
-      return is_valid = true if result == goal && (pos_goal == ' ' || pos_goal.color != color)
+      if result == goal
+        return is_valid = true if move_cell == ' ' || move_cell.color != color
+      end
     end
     is_valid
   end
