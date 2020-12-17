@@ -48,7 +48,7 @@ class Queen
       while i < 8
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
-        pos_goal = board[result[0]][result[1]] if !result.nil?
+        move_cell = board[result[0]][result[1]] if !result.nil?
         if result == goal
           if move_cell == ' ' || move_cell.color != color
             a = check_path(result, board)

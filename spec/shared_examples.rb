@@ -1,6 +1,7 @@
 require './lib/board.rb'
 require './lib/pawn.rb'
 
+#include bishop in second example ----> occupied path
  RSpec.shared_examples "move_piece_shared" do
     let(:board_shared_ex) { Board.new }
     let(:board) { board_shared_ex.board }

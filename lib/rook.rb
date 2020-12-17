@@ -74,9 +74,9 @@ class Rook
     elsif i < position[0]
       i.upto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
     end
-    if j > position[0]
+    if j > position[1]
       j.downto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
-    elsif j < position[0]
+    elsif j < position[1]
       j.upto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
     end
     clear
