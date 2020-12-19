@@ -3,7 +3,7 @@
 require_relative 'knight'
 
 class Board
-  attr_accessor :board
+  attr_accessor :board, :winner
 
   def initialize
     @board = create_board
@@ -24,13 +24,6 @@ class Board
     @board[row][column] = piece
   end
 
-  def start_move
-    prompt_select_piece
-    piece = select_piece
-    goal = ask_position
-    move_piece(piece, goal)
-  end
-
   def prompt_select_piece
     puts 'Choose the piece by putting the row and column where it is located'
   end
@@ -42,13 +35,14 @@ class Board
     piece
   end
 
-  def move_piece(piece, goal)     
-      if piece.check_move(goal, board) == true
-        reset_cell(piece.position)
-        return insert_piece(piece, goal[0], goal[1])
-      else
-        puts 'Invalid move!'
-      end
+  def move_piece(piece, goal)
+    if piece.check_move(goal, board) == true
+      reset_cell(piece.position)
+      insert_piece(piece, goal[0], goal[1])
+    else
+      puts 'Invalid move!'
+      return false
+    end
   end
 
   def reset_cell(position)

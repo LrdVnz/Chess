@@ -25,14 +25,14 @@ module Helpers
   def check_path_rook(i, j, board)
     clear = true
     if i > position[0] && j == position[1]
-      i.downto(position[0]) { |n| return clear = false if board[n][j] != ' ' && board[n][j] != self}
+      i.downto(position[0]) { |n| return clear = false if board[n][j] != ' ' && board[n][j] != self }
     elsif i < position[0] && j == position[1]
       i.upto(position[0]) { |n| return clear = false if board[n][j] != ' ' && board[n][j] != self }
     end
     if j > position[1] && i == position[0]
       j.downto(position[0]) { |n| return clear = false if board[i][n] != ' ' && board[i][n] != self }
     elsif j < position[1] && i == position[0]
-      j.upto(position[0]) { |n| return clear = false if board[i][n] != ' '&& board[i][n] != self }
+      j.upto(position[0]) { |n| return clear = false if board[i][n] != ' ' && board[i][n] != self }
     end
     clear
   end

@@ -50,7 +50,6 @@ class Queen
         result = make_move(new_move)
         move_cell = board[result[0]][result[1]] unless result.nil?
         # frozen_string_literal: true
-        # class for the queen piece. Holds position, movement, color
         if result == goal && (move_cell == ' ' || move_cell.color != color)
           a = check_path(result, board)
           return is_valid = false if a == false

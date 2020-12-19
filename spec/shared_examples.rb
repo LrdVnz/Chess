@@ -43,7 +43,7 @@ require './lib/pawn.rb'
 
 RSpec.shared_examples "move_piece_occupied_path" do
       
-  context "when given a cell that is occupied" do
+  context "when given a cell that is occupied by same color piece" do
     board_second_shared = Board.new
     pawn = Pawn.new([2,2], 'white')
     board = board_second_shared.board
@@ -53,9 +53,8 @@ RSpec.shared_examples "move_piece_occupied_path" do
         y = current_class.position[1]
         board[x][y] = current_class 
         board[2][2] = pawn 
-        expect(board_second_shared).to receive(:move_piece).and_return(:puts, :put_piece)
-        board_second_shared.move_piece(current_class, invalid_goal)
-        board_second_shared.move_piece(current_class, valid_goal)      
+        expect(board_second_shared).to receive(:puts).with('Invalid move!')
+        board_second_shared.move_piece(current_class, invalid_goal)  
       end
     end  
 

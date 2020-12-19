@@ -19,6 +19,13 @@ describe Pawn do
         expect(pawn_check.check_move([9, 9], board)).to be(false)
       end
     end
+
+    context "when piece is on starting cell" do 
+      pawn_check_start = Pawn.new([1,1], 'black')   
+         it "makes move 2 steps ahead available" do
+          expect(pawn_check_start.check_move([3,1], board)).to be(true)  
+         end
+    end
   end
 
   context "shared_example" do

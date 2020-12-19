@@ -34,14 +34,28 @@ class Pawn
   end
 
   def check_move(goal, board)
-    # if turn == 1 add first move as option
+    if self.color == 'black' && self.position[0] == 1
+       
+  end
+
+  def multiple_moves
+    is_valid = false
+    moves.each do |move|
+      result = make_move(move)
+      move_cell = board[result[0]][result[1]] unless result.nil?
+      # frozen_string_literal: true
+      return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
+    end
+    is_valid
+  end
+
+  def move_forward_check
     result = make_move(move)
     move_cell = board[result[0]][result[1]] unless result.nil?
     # frozen_string_literal: true
-    # class for the pawn piece. Holds position, movement, color
-    # if turn == 1 add first move as option
     return true if result == goal && (move_cell == ' ' || move_cell.color != color)
 
     false
   end
+
 end
