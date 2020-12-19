@@ -48,19 +48,25 @@ class Queen
       while i < 8
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
-        move_cell = board[result[0]][result[1]] if !result.nil?
-        if result == goal
-          if move_cell == ' ' || move_cell.color != color
-            a = check_path(result, board)
-            return is_valid = false if a == false
+        move_cell = board[result[0]][result[1]] unless result.nil?
+        # frozen_string_literal: true
+        # class for the queen piece. Holds position, movement, color
+        if result == goal && (move_cell == ' ' || move_cell.color != color)
+          a = check_path(result, board)
+          return is_valid = false if a == false
 
-            return is_valid = true
-          end
+          return is_valid = true
         end
         i += 1
       end
     end
     is_valid
   end
-end
 
+  def check_path(result, board)
+    i = result[0]
+    j = result[1]
+    return check_path_rook(i, j, board) if check_path_rook(i, j, board) == false
+    return check_path_bishop(i, j, board) if check_path_bishop(i, j, board) == false
+  end
+end

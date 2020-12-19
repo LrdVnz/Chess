@@ -42,13 +42,13 @@ class King
   end
 
   def check_move(goal, board)
-    is_valid = false  
+    is_valid = false
     moves.each do |move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      if result == goal
-        return is_valid = true if move_cell == ' ' || move_cell.color != color
-      end
+      # frozen_string_literal: true
+      # class for the king piece. Holds position, movement, color
+      return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
     end
     is_valid
   end

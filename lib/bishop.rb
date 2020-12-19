@@ -44,14 +44,13 @@ class Bishop
       while i < 8
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
-        move_cell = board[result[0]][result[1]] if !result.nil?
-        if result == goal
-          if move_cell == ' ' || move_cell.color != color
-            a = check_path(result, board)
-            return is_valid = false if a == false
+        move_cell = board[result[0]][result[1]] unless result.nil?
+        # frozen_string_literal: true
+        if result == goal && (move_cell == ' ' || move_cell.color != color)
+          path_clear = check_path(result, board)
+          return is_valid = false if path_clear == false
 
-            return is_valid = true
-          end
+          return is_valid = true
         end
 
         i += 1
@@ -60,46 +59,9 @@ class Bishop
     is_valid
   end
 
-  #write it for bishop . if i > position[0] && j > position[0], if i > position[0] && j < position[0]
   def check_path(result, board)
     i = result[0]
     j = result[1]
-    clear = true
-    if i > position[0] && j > position[1]
-      i.downto(position[0]) { |n| 
-        j.downto(position[1]) { |m|         
-        if board[n][m] != ' '
-          return clear = false 
-        end 
-      }
-    }
-    elsif i < position[0] && j < position[1] 
-      i.upto(position[0]) { |n| 
-        j.upto(position[1]) { |m|         
-        if board[n][m] != ' '
-          return clear = false 
-        end 
-      }
-    }
+    check_path_bishop(i, j, board)
   end
-    if i > position[0] && j < position[1]
-      i.downto(position[0]) { |n| 
-        j.upto(position[1]) { |m|         
-        if board[n][m] != ' '
-          return clear = false 
-        end 
-      }
-    }
-    elsif i < position[0] && j > position[1]
-      i.upto(position[0]) { |n| 
-        j.downto(position[1]) { |m|         
-        if board[n][m] != ' '
-          return clear = false 
-        end 
-      }
-    }
-    end
-    clear
-  end
-
 end

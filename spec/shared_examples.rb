@@ -20,12 +20,10 @@ require './lib/pawn.rb'
         end
     end
 
-       context "when giving an invalid goal once" do
-         it "puts 'Input error!' once" do
-          error_message = 'Invalid move!'
-          allow(board_shared_ex).to receive(:move_piece).and_return(:puts, :put_piece)
+       context "when giving an invalid goal" do
+         it "puts 'Invalid move!' " do
+          expect(board_shared_ex).to receive(:puts).with('Invalid move!')
           board_shared_ex.move_piece(current_class, invalid_goal)
-          board_shared_ex.move_piece(current_class, valid_goal)  
          end
        end
 
@@ -60,22 +58,19 @@ RSpec.shared_examples "move_piece_occupied_path" do
         board_second_shared.move_piece(current_class, valid_goal)      
       end
     end  
-    
+
     context "when given a cell where the path is occupied" do
       board_second_shared = Board.new
       pawn =  Pawn.new([3,2], 'white')
       board = board_second_shared.board 
-      error_message = 'Invalid move!'
-
-        it "puts error" do
-          x = current_class.position[0]
-          y = current_class.position[1]
-          board[x][y] = current_class
-          board[3][2] = pawn 
-          allow(board_second_shared).to receive(:check_move).and_return(false, true)
-          expect(board_second_shared).to receive(:move_piece).and_return(:puts, :insert_piece)
-          board_second_shared.move_piece(current_class, invalid_goal)
-          board_second_shared.move_piece(current_class, valid_goal)
-          end
+         
+      it "returns 'Invalid move!' " do
+        current_class_x = current_class.position[0]
+        current_class_y = current_class.position[1]
+        board[current_class_x][current_class_y] = current_class
+        board[3][2] = pawn         
+        expect(board_second_shared).to receive(:puts).with('Invalid move!')
+        board_second_shared.move_piece(current_class, invalid_goal)
       end
+    end
 end

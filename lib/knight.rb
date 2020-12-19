@@ -5,7 +5,7 @@ require_relative 'pieces_helpers'
 # class for the knight piece. Holds position, movement, color
 class Knight
   include Helpers
-  attr_reader :color, :image, :movelist
+  attr_reader :color
   attr_accessor :position
 
   def initialize(position, color)
@@ -45,12 +45,9 @@ class Knight
     is_valid = false
     @movelist.each do |move|
       result = make_move(move)
-      move_cell = board[result[0]][result[1]] if !result.nil?
-      if result == goal
-        if move_cell == ' ' || move_cell.color != color
-          return is_valid = true
-        end
-      end
+      move_cell = board[result[0]][result[1]] unless result.nil?
+      next unless result == goal
+      return is_valid = true if move_cell == ' ' || move_cell.color != color
     end
     is_valid
   end

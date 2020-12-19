@@ -39,18 +39,16 @@ class Board
     pos = ask_position
     piece = @board[pos[0]][pos[1]]
     puts "piece #{piece}"
-    piece 
+    piece
   end
 
-  def move_piece(piece, goal)
-    loop do
+  def move_piece(piece, goal)     
       if piece.check_move(goal, board) == true
         reset_cell(piece.position)
         return insert_piece(piece, goal[0], goal[1])
       else
         puts 'Invalid move!'
       end
-    end
   end
 
   def reset_cell(position)
@@ -63,13 +61,9 @@ class Board
       input = gets.chomp
       puts 'Now choose a column from 0 to 7'
       input2 = gets.chomp
-      if input.match(/[0-7]/) && input2.match(/[0-7]/)
-        row = input.to_i
-        column = input2.to_i
-        return [first, second]
-      else
-        puts 'Input error! Choose a row and a column, from 0 to 7'
-      end
+      return [input.to_i, input2.to_i] if input.match(/[0-7]/) && input2.match(/[0-7]/)
+
+      puts 'Input error! Choose a row and a column, from 0 to 7'
     end
   end
 

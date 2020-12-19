@@ -45,13 +45,12 @@ class Rook
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         move_cell = goal_cell(result, board) unless result.nil?
-        if result == goal
-          if move_cell == ' ' || move_cell.color != color
-            a = check_path(result, board)
-            return is_valid = false if a == false
+        # frozen_string_literal: true
+        if result == goal && (move_cell == ' ' || move_cell.color != color)
+          a = check_path(result, board)
+          return is_valid = false if a == false
 
-            return is_valid = true
-          end
+          return is_valid = true
         end
         i += 1
       end
@@ -68,17 +67,6 @@ class Rook
   def check_path(result, board)
     i = result[0]
     j = result[1]
-    clear = true
-    if i > position[0]
-      i.downto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
-    elsif i < position[0]
-      i.upto(position[0]) { |n| return clear = false if board[n][j] != ' ' }
-    end
-    if j > position[1]
-      j.downto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
-    elsif j < position[1]
-      j.upto(position[0]) { |n| return clear = false if board[i][n] != ' ' }
-    end
-    clear
+    check_path_rook(i, j, board)
   end
 end

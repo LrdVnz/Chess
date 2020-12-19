@@ -34,4 +34,13 @@ describe Queen do
      let(:invalid_goal) { ['aaa','eeeffff'] }
     end
   end
+
+  context "shared_example second" do
+    include_examples 'move_piece_occupied_path' do 
+      let(:current_class) { Queen.new([2,1],'white') }
+      let(:valid_goal) { [2, 4] }
+      let(:invalid_goal) { [4, 3] }
+    end
+  end
+
 end
