@@ -35,10 +35,10 @@ class Pawn
 
   def check_move(goal, board)
     # if turn == 1 add first move as option
-    result = make_move(move)  
-    move_cell = board[result[0]][result[1]] if !result.nil?
+    result = make_move(move) 
+    move_cell = board[result[0]][result[1]] unless result.nil?
     if result == goal
-      return true if move_cell == ' ' || move_cell.color != color
+      return true if move_cell == ' ' || move_cell.color != self.color
     end
 
     false

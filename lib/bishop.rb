@@ -75,7 +75,7 @@ class Bishop
     }
     elsif i < position[0] && j < position[1] 
       i.upto(position[0]) { |n| 
-        j.upto(position[0]) { |m|         
+        j.upto(position[1]) { |m|         
         if board[n][m] != ' '
           return clear = false 
         end 

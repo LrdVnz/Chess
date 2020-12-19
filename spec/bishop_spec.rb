@@ -33,12 +33,14 @@ describe Bishop do
      let(:valid_goal) { [4, 2] }
      let(:invalid_goal) { [10,50] }
     end
-    
+  end
+
+  context "shared_example second" do
     include_examples 'move_piece_occupied_path' do 
-      let(:current_class) { Bishop.new([1,1],'white') }
+      let(:current_class) { Bishop.new([2,1],'white') }
       let(:valid_goal) { [4, 4] }
-      let(:invalid_goal) { [1000000,502434343] }
-     end
+      let(:invalid_goal) { [5, 4] }
+    end
   end
 
 end
