@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require_relative 'knight.rb'
+require_relative 'knight'
 
+# Board class. Holds graphical represantion, functions to handle pieces
 class Board
   attr_accessor :board, :winner
 

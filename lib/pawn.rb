@@ -18,28 +18,9 @@ class Pawn
   def movelist
     case color
     when 'white'
-      @moves = {
-        'standard' => [+1, 0],
-        'first_move' => [+2, 0],
-        'eat_right' => [-1, +1],
-        'eat_left' => [-1, -1]
-      }
+      @moves = moves_white
     when 'black'
-      @moves = {
-        'standard' => [+1, 0],
-        'first_move' => [+2, 0],
-        'eat_right' => [+1, +1],
-        'eat_left' => [+1, -1]
-      }
-    end
-  end
-
-  def image
-    case color
-    when 'white'
-      @image = '♙'
-    when 'black'
-      @image = '♟︎'
+      @moves = moves_black
     end
   end
 
@@ -55,6 +36,8 @@ class Pawn
     end
   end
 
+  private
+
   def multiple_moves(goal, board)
     is_valid = false
     moves.each_value do |move|
@@ -67,19 +50,49 @@ class Pawn
 
   def move_forward_check(goal, board)
     is_valid = false
-    default_moves = @moves
-    @moves.delete('first_move')
-    moves.each do |key, move|
+    less_moves = @moves.reject { |k, _v| k == 'first_move' }
+    less_moves.each do |key, move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      # frozen_string_literal: true
-      # class for the pawn piece. Holds position, movement, color
-      if result == goal && %w[eat_right eat_left].include?(key) && move_cell != ' ' && move_cell.color != color
-        return is_valid = true
-      end
-      return is_valid = true if result == goal && key == 'standard' && move_cell == ' '
+      return is_valid = true if verify_diagonal(result, goal, key, move_cell)
+      return is_valid = true if verify_standard(result, goal, key, move_cell)
     end
-    @moves = default_moves
     is_valid
+  end
+
+  def verify_diagonal(result, goal, key, move_cell)
+    result == goal && %w[eat_right eat_left].include?(key) &&
+      move_cell != ' ' && move_cell.color != color
+  end
+
+  def verify_standard(result, goal, key, move_cell)
+    result == goal && key == 'standard' && move_cell == ' '
+  end
+
+  def image
+    case color
+    when 'white'
+      @image = '♙'
+    when 'black'
+      @image = '♟︎'
+    end
+  end
+
+  def moves_white
+    {
+      'standard' => [+1, 0],
+      'first_move' => [+2, 0],
+      'eat_right' => [-1, +1],
+      'eat_left' => [-1, -1]
+    }
+  end
+
+  def moves_black
+    {
+      'standard' => [+1, 0],
+      'first_move' => [+2, 0],
+      'eat_right' => [+1, +1],
+      'eat_left' => [+1, -1]
+    }
   end
 end

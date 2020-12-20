@@ -40,23 +40,28 @@ class Bishop
   def check_move(goal, board)
     is_valid = false
     @moves.each do |move|
-      i = 0
-      while i < 8
+      0.upto(7) do |i|
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         move_cell = board[result[0]][result[1]] unless result.nil?
-        # frozen_string_literal: true
-        if result == goal && (move_cell == ' ' || move_cell.color != color)
-          path_clear = check_path(result, board)
-          return is_valid = false if path_clear == false
-
-          return is_valid = true
-        end
-
-        i += 1
+        return is_valid = path_clear?(result, board) if verify_conditions(result, goal, move_cell)
       end
     end
     is_valid
+  end
+
+  def verify_conditions(result, goal, move_cell)
+    result == goal && (move_cell == ' ' || move_cell.color != color)
+  end
+
+  def path_clear?(result, board)
+    path_clear = check_path(result, board)
+    case path_clear
+    when false
+      false
+    else
+      true
+    end
   end
 
   def check_path(result, board)
