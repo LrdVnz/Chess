@@ -10,7 +10,7 @@ module Helpers
   end
 
   def make_move(move)
-    return nil if check_limits(move, position)
+    return nil if check_limits(move)
 
     result = []
     result[0] = position[0] + move[0]
@@ -18,8 +18,8 @@ module Helpers
     result
   end
 
-  def check_limits(move, pos)
-    (pos[0] + move[0]).negative? || (pos[0] + move[0]) > 7 || (pos[1] + move[1]).negative? || (pos[1] + move[1]) > 7
+  def check_limits(move)
+    (position[0] + move[0]).negative? || (position[0] + move[0]) > 7 || (position[1] + move[1]).negative? || (position[1] + move[1]) > 7
   end
 
   def check_path_rook(i, j, board)

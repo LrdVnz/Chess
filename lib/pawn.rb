@@ -5,8 +5,8 @@ require_relative 'pieces_helpers'
 # class for the pawn piece. Holds position, movement, color
 class Pawn
   include Helpers
-  attr_reader :move, :color
-  attr_accessor :position
+  attr_reader :color
+  attr_accessor :position, :moves
 
   def initialize(position, color)
     @position = position
@@ -16,8 +16,22 @@ class Pawn
   end
 
   def movelist
-    @move = [+1, 0]
-    @first_move = [+2, 0]
+    case self.color 
+    when 'white'
+      @moves = { 
+       'standard'   => [+1,  0], 
+       'first_move' => [+2,  0],
+       'eat_right'  => [-1, +1], 
+       'eat_left'   => [-1, -1]
+       }
+    when 'black'
+      @moves = { 
+        'standard'   => [+1,  0], 
+        'first_move' => [+2,  0],
+        'eat_right'  => [+1, +1],
+        'eat_left'   => [+1, -1]
+      }
+    end
   end
 
   def image
@@ -34,28 +48,39 @@ class Pawn
   end
 
   def check_move(goal, board)
-    if self.color == 'black' && self.position[0] == 1
-       
+    if self.position[0] == 1 || self.position[0] == 6
+      multiple_moves(goal, board)
+    else  
+      move_forward_check(goal, board)
+    end
   end
 
-  def multiple_moves
+  def multiple_moves(goal, board)
     is_valid = false
-    moves.each do |move|
+    moves.values.each do |move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      # frozen_string_literal: true
       return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
     end
     is_valid
   end
 
-  def move_forward_check
-    result = make_move(move)
-    move_cell = board[result[0]][result[1]] unless result.nil?
-    # frozen_string_literal: true
-    return true if result == goal && (move_cell == ' ' || move_cell.color != color)
-
-    false
-  end
+  def move_forward_check(goal, board)
+    is_valid = false
+    default_moves = @moves
+    @moves.delete('first_move')
+    moves.each do |key, move|
+      result = make_move(move)
+      move_cell = board[result[0]][result[1]] unless result.nil?
+      if result == goal && (key == 'eat_right' || key == 'eat_left')
+         if move_cell != ' ' && move_cell.color != self.color
+           return is_valid = true     
+         end
+      end
+      return is_valid = true if result == goal && key == 'standard' && move_cell == ' '
+    end
+    @moves = default_moves
+    is_valid
+  end 
 
 end
