@@ -16,20 +16,20 @@ class Pawn
   end
 
   def movelist
-    case self.color 
+    case color
     when 'white'
-      @moves = { 
-       'standard'   => [+1,  0], 
-       'first_move' => [+2,  0],
-       'eat_right'  => [-1, +1], 
-       'eat_left'   => [-1, -1]
-       }
+      @moves = {
+        'standard' => [+1, 0],
+        'first_move' => [+2, 0],
+        'eat_right' => [-1, +1],
+        'eat_left' => [-1, -1]
+      }
     when 'black'
-      @moves = { 
-        'standard'   => [+1,  0], 
-        'first_move' => [+2,  0],
-        'eat_right'  => [+1, +1],
-        'eat_left'   => [+1, -1]
+      @moves = {
+        'standard' => [+1, 0],
+        'first_move' => [+2, 0],
+        'eat_right' => [+1, +1],
+        'eat_left' => [+1, -1]
       }
     end
   end
@@ -48,16 +48,16 @@ class Pawn
   end
 
   def check_move(goal, board)
-    if self.position[0] == 1 || self.position[0] == 6
+    if position[0] == 1 || position[0] == 6
       multiple_moves(goal, board)
-    else  
+    else
       move_forward_check(goal, board)
     end
   end
 
   def multiple_moves(goal, board)
     is_valid = false
-    moves.values.each do |move|
+    moves.each_value do |move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
       return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
@@ -72,15 +72,14 @@ class Pawn
     moves.each do |key, move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      if result == goal && (key == 'eat_right' || key == 'eat_left')
-         if move_cell != ' ' && move_cell.color != self.color
-           return is_valid = true     
-         end
+      # frozen_string_literal: true
+      # class for the pawn piece. Holds position, movement, color
+      if result == goal && %w[eat_right eat_left].include?(key) && move_cell != ' ' && move_cell.color != color
+        return is_valid = true
       end
       return is_valid = true if result == goal && key == 'standard' && move_cell == ' '
     end
     @moves = default_moves
     is_valid
-  end 
-
+  end
 end
