@@ -9,21 +9,21 @@ class Game < Board
    def initialize
      @winner = false 
      @turns = 0 
-     @b = Board.new 
+     @board = Board.new 
      @current_player = nil 
    end
    
   def turn_loop
     while winner == false
-      b.prompt_select_piece
-      piece = b.select_piece
-      goal = b.ask_position
-      move = b.move_piece(piece,goal)
+      board.prompt_select_piece
+      piece = board.select_piece
+      goal = board.ask_position
+      move = board.move_piece(piece,goal)
       if move != false
         @turns += 1 
         @current_player = nil #change_player
       end
-      break if win? == true 
+      return if win? == true 
     end
   end
 

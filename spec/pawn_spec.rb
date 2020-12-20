@@ -51,7 +51,7 @@ describe Pawn do
         goal = [3,4]
         enemy_pawn = Pawn.new(goal, 'white')
         board[goal[0]][goal[1]] = enemy_pawn
-        board[2][2] = pawn
+        board[2][5] = pawn
         expect(pawn.check_move(goal, board)).to be(true) 
        end        
 
@@ -60,18 +60,17 @@ describe Pawn do
         goal = [3,4]
         enemy_pawn = Pawn.new(goal, 'black')
         board[goal[0]][goal[1]] = enemy_pawn
-        board[2][2] = pawn
+        board[2][5] = pawn
         expect(pawn.check_move(goal, board)).to be(false)    
        end
       end
     end
-  end
 
-=begin  context "shared_example" do
+  context "shared_example" do
     include_examples 'move_piece_shared' do 
      let(:current_class) { Pawn.new([2,0],'white') }
      let(:valid_goal) { [3,0] }
      let(:invalid_goal) { [0,7] }
     end
   end
-=end
+end
