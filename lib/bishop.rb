@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'pieces_helpers'
+require_relative 'path_checker'
 
 # class for the bishop piece. Holds position, movement, color
 class Bishop
+  include PathChecker
   include Helpers
   attr_reader :moves, :color
   attr_accessor :position

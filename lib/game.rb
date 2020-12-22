@@ -5,7 +5,7 @@ require_relative 'board'
 # main game script
 class Game < Board
   attr_accessor :winner, :turns, :current_player
-  attr_reader :b, :p1, :p2
+  attr_reader :board, :p1, :p2
 
   def initialize
     @winner = false

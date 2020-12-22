@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'board'
-
-class Player < Board
+# class for the player. For holding color, controlling movement.
+class Player
   attr_reader :color
 
   def initialize(color)
