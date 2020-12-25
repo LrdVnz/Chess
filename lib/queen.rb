@@ -41,7 +41,7 @@ class Queen
       [(0..7).to_a.reverse, (-7..0).to_a]
     ]
   end
-  
+
   def check_move(goal, board)
     is_valid = false
     @moves.each do |move|
