@@ -1,6 +1,4 @@
-require './lib/board.rb'
-require './lib/pawn.rb'
-
+Dir["./lib/pieces/*.rb"].each {|file| require file }
 #include bishop in second example ----> occupied path
  RSpec.shared_examples "move_piece_shared" do
     let(:board_shared_ex) { Board.new }
@@ -8,6 +6,7 @@ require './lib/pawn.rb'
       
        context "when giving a valid goal for the piece" do
         it "moves piece to the goal" do
+          allow_any_instance_of(Board).to receive(:init_pieces)
             board_shared_ex.move_piece(current_class, valid_goal)
             expect(board[valid_goal[0]][valid_goal[1]]).to be(current_class)  
         end
@@ -42,12 +41,11 @@ require './lib/pawn.rb'
   end
 
 RSpec.shared_examples "move_piece_occupied_path" do
-      
-  context "when given a cell that is occupied by same color piece" do
-    board_second_shared = Board.new
-    pawn = Pawn.new([2,2], 'white')
-    board = board_second_shared.board
+  let(:board_second_shared) { Board.new }
+  let(:pawn) { Pawn.new([2,2], 'white') }
+  let(:board) { board_second_shared.board }
 
+  context "when given a cell that is occupied by same color piece" do   
       it "puts error" do
         x = current_class.position[0]
         y = current_class.position[1]
@@ -59,10 +57,6 @@ RSpec.shared_examples "move_piece_occupied_path" do
     end  
 
     context "when given a cell where the path is occupied" do
-      board_second_shared = Board.new
-      pawn =  Pawn.new([3,2], 'white')
-      board = board_second_shared.board 
-         
       it "returns 'Invalid move!' " do
         current_class_x = current_class.position[0]
         current_class_y = current_class.position[1]

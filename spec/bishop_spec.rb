@@ -1,4 +1,5 @@
-require './lib/bishop.rb'
+Dir["./lib/pieces/*.rb"].each {|file| require file }
+require './lib/board.rb'
 require_relative 'shared_examples.rb'
 
 describe Bishop do
@@ -8,10 +9,12 @@ describe Bishop do
 
     context "when given valid goal" do
       it "returns true" do
+        allow_any_instance_of(Board).to receive(:init_pieces)
         expect(bishop_check.check_move([5, 7], board)).to be(true)
       end
 
-      it "returns true" do
+      it "returns true again" do
+        allow_any_instance_of(Board).to receive(:init_pieces)
         expect(bishop_check.check_move([2, 0], board)).to be(true)
       end
     end

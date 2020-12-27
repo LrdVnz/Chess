@@ -1,5 +1,5 @@
 require './lib/player.rb'
-require './lib/pawn.rb'
+require './lib/pieces/pawn.rb'
 
 describe Player do
 

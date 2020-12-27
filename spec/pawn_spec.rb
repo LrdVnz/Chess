@@ -1,4 +1,5 @@
-require './lib/pawn.rb'
+Dir["./lib/pieces/*.rb"].each {|file| require file }
+require './lib/board.rb'
 require_relative 'shared_examples.rb'
 
 describe Pawn do

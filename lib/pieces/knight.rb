@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'pieces_helpers'
+require_relative 'helpers/pieces_helpers.rb'
 
 # class for the knight piece. Holds position, movement, color
 class Knight

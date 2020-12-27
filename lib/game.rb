@@ -61,8 +61,4 @@ class Game < Board
   end
 end
 
-# b = Board.new
-# b.create_piece(Knight, [0,2], 'black')
-# b.showboard
-# b.start_move
-# b.showboard
+Game.new

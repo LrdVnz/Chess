@@ -1,10 +1,8 @@
-require './lib/rook.rb'
+Dir["./lib/pieces/*.rb"].each {|file| require file }
+require './lib/board.rb'
 require_relative 'shared_examples.rb'
 
 describe Rook do
-  describe "#initialize" do
-    # initalize. Same for all pieces, no need for testing
-  end
 
   describe "#check_move" do
     subject(:tower_check) { described_class.new([0, 0], 'white') }
@@ -12,10 +10,12 @@ describe Rook do
 
     context "when given a valid goal" do
       it "returns true" do
+        allow_any_instance_of(Board).to receive(:init_pieces)
         expect(tower_check.check_move([4, 0], board)).to be(true)
       end
 
       it "returns true" do
+        allow_any_instance_of(Board).to receive(:init_pieces)
         expect(tower_check.check_move([0, 7], board)).to be(true)
       end
     end

@@ -1,24 +1,28 @@
-require './lib/king.rb'
+Dir["./lib/pieces/*.rb"].each {|file| require file }
+require './lib/board.rb'
 require_relative 'shared_examples.rb'
 
 describe King do
   describe "#check_move" do
-    subject(:king_check) { described_class.new([0, 3], 'white') }
-    let(:board) { Board.new.board }
+    subject(:king_check) { described_class.new([0, 4], 'black') }
+    let(:board_king) { Board.new }
+    let(:board) { board_king.board }
 
     context "when given a valid goal" do
       it "returns true" do
-        expect(king_check.check_move([0, 4], board)).to be(true)
+        allow_any_instance_of(Board).to receive(:init_pieces)
+        expect(king_check.check_move([0, 5], board)).to be(true)
       end
 
       it "returns true" do
-        expect(king_check.check_move([1, 3], board)).to be(true)
+        allow_any_instance_of(Board).to receive(:init_pieces)
+        expect(king_check.check_move([1, 4], board)).to be(true)
       end
     end
 
-    context "when given a valid goal" do
+    context "when given an invalid goal" do
       it "returns false" do
-        expect(king_check.check_move([4, 4], board)).to be(false)
+        expect(king_check.check_move([4, 5], board)).to be(false)
       end
 
       it "returns false" do

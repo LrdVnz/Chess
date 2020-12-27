@@ -1,4 +1,5 @@
-require './lib/queen.rb'
+Dir["./lib/pieces/*.rb"].each {|file| require file }
+require './lib/board.rb'
 require_relative 'shared_examples.rb'
 
 describe Queen do
@@ -8,10 +9,12 @@ describe Queen do
 
     context "when given a valid goal" do
       it "returns true" do
+        allow_any_instance_of(Board).to receive(:init_pieces)
         expect(queen_check.check_move([4, 4], board)).to be(true)
       end
 
       it "returns true" do
+        allow_any_instance_of(Board).to receive(:init_pieces)
         expect(queen_check.check_move([4, 0], board)).to be(true)
       end
     end

@@ -1,13 +1,11 @@
-# frozen_string_literal: true
-
-require_relative 'knight'
-
+Dir["pieces/*.rb"].each {|file| require file }
 # Board class. Holds graphical represantion, functions to handle pieces
 class Board
   attr_accessor :board, :winner
 
   def initialize
     @board = create_board
+    init_pieces
   end
 
   def create_board

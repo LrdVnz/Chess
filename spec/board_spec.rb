@@ -17,9 +17,14 @@ describe Board do
 
   describe "#set_piece" do 
    subject(:board_set_piece) { described_class.new }
+     
+   before(:each) do
+    allow_any_instance_of(Board).to receive(:init_pieces)
+   end
 
       context "when chosen piece is Knight" do
          it "creates a new knight and calls put_piece" do
+          allow_any_instance_of(Board).to receive(:init_pieces)
             expect(Knight).to receive(:new).with([0,1], 'white')
             expect(board_set_piece).to receive(:insert_piece)
             board_set_piece.create_piece(Knight, [0,1], 'white') 
@@ -29,7 +34,11 @@ describe Board do
 
   describe "#put_piece" do
     subject(:board_put_piece) { described_class.new }
-    let(:knight) { Knight.new([0,1], 'white') }
+    let(:knight) { Knight.new([0,1], 'black') }
+
+   before(:each) do
+    allow_any_instance_of(Board).to receive(:init_pieces)
+   end
 
     context "when giving a knight" do
         it "puts it on the chosen position on the board" do
@@ -43,6 +52,10 @@ describe Board do
   describe "#get_position" do
    subject(:board_get_position) { described_class.new }
 
+   before(:each) do
+    allow_any_instance_of(Board).to receive(:init_pieces)
+   end
+   
     context "when given correct values" do
       it "returns the two values in the array" do
         allow(board_get_position).to receive(:gets).and_return(2,2)

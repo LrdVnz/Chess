@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'pieces_helpers'
-require_relative 'path_checker'
+require_relative 'helpers/pieces_helpers'
+require_relative 'helpers/path_checker.rb'
 
 # class for the rook piece. Holds position, movement, color
 class Rook

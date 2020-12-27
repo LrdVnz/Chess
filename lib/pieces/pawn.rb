@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'pieces_helpers'
+require_relative 'helpers/pieces_helpers'
 
 # class for the pawn piece. Holds position, movement, color
 class Pawn
