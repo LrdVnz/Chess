@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'board'
 # class for the player. For holding color, controlling movement.
-class Player
+class Player < Board
   attr_reader :color
 
   def initialize(color)
     @color = color
-  end
-
-  def do_move(board)
-    prompt_select_piece
-    piece = select_piece(board)
-    goal = ask_position
-    move_piece(piece, goal)
   end
 
   def select_piece(board)
@@ -30,14 +24,18 @@ class Player
   end
 
   def verify_color(pos, board)
-    if board[pos[0]][pos[1]] != ' ' && board[pos[0]][pos[1]].color != color
+    cell = board[pos[0]][pos[1]]
+    if cell != ' ' && cell.color != color
       puts 'Please choose one of your pieces.'
+      return false
+    elsif cell == ' '
+      puts 'Please choose a piece'
       return false
     end
     true
   end
 
-  def prompt_select_piece
+  def text_select_piece
     puts 'Choose the piece by putting the row and column where it is located'
   end
 

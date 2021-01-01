@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'helpers/pieces_helpers.rb'
-require_relative 'helpers/path_checker.rb'
+require_relative 'helpers/pieces_helpers'
+require_relative 'helpers/path_checker'
 
 # class for the bishop piece. Holds position, movement, color
 class Bishop

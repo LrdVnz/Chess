@@ -1,4 +1,8 @@
-Dir["pieces/*.rb"].each {|file| require file }
+# frozen_string_literal: true
+
+project_root = File.dirname(File.absolute_path(__FILE__))
+Dir.glob("#{project_root}/pieces/*.rb").sort.each { |file| require file }
+
 # Board class. Holds graphical represantion, functions to handle pieces
 class Board
   attr_accessor :board, :winner
@@ -20,21 +24,7 @@ class Board
   end
 
   def insert_piece(piece, row, column)
-    @board[row][column] = piece
-  end
-
-  def move_piece(piece, goal)
-    if piece.check_move(goal, board) == true
-      reset_cell(piece.position)
-      insert_piece(piece, goal[0], goal[1])
-    else
-      puts 'Invalid move!'
-      false
-    end
-  end
-
-  def reset_cell(position)
-    @board[position[0]][position[1]] = ' '
+    board[row][column] = piece
   end
 
   def init_pieces
@@ -42,6 +32,24 @@ class Board
     black_side_pawns
     white_side_first
     white_side_pawns
+    @board
+  end
+
+  def move_piece(piece, goal, passed_board)
+    if piece.check_move(goal, passed_board) == true
+      reset_cell(piece.position)
+      insert_piece(piece, goal[0], goal[1])
+      showboard
+    else
+      puts 'Invalid move!'
+      false
+    end
+  end
+
+  private
+
+  def reset_cell(position)
+    board[position[0]][position[1]] = ' '
   end
 
   def black_side_first
@@ -58,7 +66,9 @@ class Board
   end
 
   def black_side_pawns
-    board[1].each_index { |index| board[1][index] = Pawn.new([1, index], 'black') }
+    board[1].each_index do |index|
+      board[1][index] = Pawn.new([1, index], 'black')
+    end
   end
 
   def white_side_first
@@ -75,7 +85,9 @@ class Board
   end
 
   def white_side_pawns
-    board[6].each_index { |index| board[6][index] = Pawn.new([6, index], 'white') }
+    board[6].each_index do |index|
+      board[6][index] = Pawn.new([6, index], 'white')
+    end
   end
 
   def showboard
@@ -85,5 +97,6 @@ class Board
       end
       puts "\n ---------------------------------------"
     end
+    puts "\n"
   end
 end

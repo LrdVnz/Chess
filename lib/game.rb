@@ -1,40 +1,55 @@
 # frozen_string_literal: true
 
 require_relative 'board'
+require_relative 'player'
+require_relative 'game_save_module'
 
 # main game script
 class Game < Board
+  include SaveGame
   attr_accessor :winner, :turns, :current_player
-  attr_reader :board, :p1, :p2
+  attr_reader :board, :p1, :p2, :saves_path
 
   def initialize
     @winner = false
-    @turns = 0
+    @turns = 1
     @board = super
     @current_player = nil
+    @saves_path = '/home/vincenzo/Development/the-odin-project-main/Ruby/chess/saves/'
   end
 
   def start_game
-    loop do
+    # ask_load
+    while @current_player.nil?
       input = ask_input
       case input.downcase
       when 'black'
-        return start_black
+        start_black
       when 'white'
-        return start_white
+        start_white
       end
     end
+    turn_loop
   end
 
   def turn_loop
     while winner == false
-      move = @current_player.do_move(board)
+      puts "current player is #{@current_player.color}" unless current_player.nil?
+      move = do_move
       if move != false
         @turns += 1
         @current_player = @current_player == @p1 ? @p2 : @p1
       end
-      return if win? == true
+      @winner = win?
+      showboard
     end
+  end
+
+  def do_move
+    @current_player.text_select_piece
+    piece = @current_player.select_piece(board)
+    goal = @current_player.ask_position
+    move_piece(piece, goal, board)
   end
 
   private
@@ -45,14 +60,14 @@ class Game < Board
   end
 
   def start_black
-    @p1 = 'black'
-    @p2 = 'white'
+    @p1 = Player.new('black')
+    @p2 = Player.new('white')
     @current_player = @p1
   end
 
   def start_white
-    @p1 = 'white'
-    @p2 = 'black'
+    @p1 = Player.new('white')
+    @p2 = Player.new('black')
     @current_player = @p1
   end
 
@@ -61,4 +76,4 @@ class Game < Board
   end
 end
 
-Game.new
+# Game.new.start_game

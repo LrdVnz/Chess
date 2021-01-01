@@ -42,7 +42,9 @@ class Pawn
     is_valid = false
     moves.each_value do |move|
       result = make_move(move)
-      move_cell = board[result[0]][result[1]] unless result.nil?
+      next if result.nil?
+
+      move_cell = board[result[0]][result[1]]
       return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
     end
     is_valid
