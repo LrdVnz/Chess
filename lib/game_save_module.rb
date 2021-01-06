@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-
 require 'json'
+
 # module for the methods regarding saving, loading the save files
 module SaveGame
   def save
@@ -15,7 +15,7 @@ module SaveGame
 
   def load
     puts 'Choose what save to load :'
-    # how to output current save files available ?
+    Dir.entries(@saves_path).each {|file| puts "#{file}\n" }
     save_name = gets.chomp
     save = File.read(@saves_path + save_name)
     data = JSON.parse(save)

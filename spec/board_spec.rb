@@ -93,16 +93,4 @@ describe Board do
       end
     end
   end
-
-  describe '#init_pieces' do
-    subject(:board_init_pieces) { described_class.new }
-
-    context 'when run' do
-      it 'puts pieces on the board correctly' do
-        board_init_pieces.init_pieces
-        puts 'board init pieces result'
-        board_init_pieces.send(:showboard)
-      end
-    end
-  end
 end

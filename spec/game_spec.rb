@@ -3,6 +3,10 @@
 require './lib/game'
 
 describe Game do
+  before(:each) do
+  allow_any_instance_of(Game).to receive(:puts)
+  end
+
   describe '#start_game' do
     subject(:game_start) { described_class.new }
     let(:sample_piece) { Pawn.new([1, 3], 'black') }
@@ -85,7 +89,8 @@ describe Game do
         it "loads the file correctly" do
           p1 = game_load.p1
           p2 = game_load.p2
-          allow(game_load).to receive(:gets).and_return('save1')
+          allow(game_load).to receive(:gets).and_return('save1', 'save1')
+          game_load.save
           game_load.load
           expect(game_load.p1).to be(p1)
         end
