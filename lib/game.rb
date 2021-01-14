@@ -19,7 +19,7 @@ class Game < Board
   end
 
   def start_game
-    # ask_load
+    ask_load
     while @current_player.nil?
       input = ask_input
       case input.downcase
@@ -34,6 +34,7 @@ class Game < Board
 
   def turn_loop
     while winner == false
+      showboard
       puts "current player is #{@current_player.color}" unless current_player.nil?
       move = do_move
       if move != false
@@ -41,15 +42,15 @@ class Game < Board
         @current_player = @current_player == @p1 ? @p2 : @p1
       end
       @winner = win?
-      showboard
     end
   end
 
   def do_move
     @current_player.text_select_piece
     piece = @current_player.select_piece(board)
+    puts "Choose the goal cell"
     goal = @current_player.ask_position
-    move_piece(piece, goal, board)
+    move_piece(piece, goal, board, turns)
   end
 
   private
@@ -76,4 +77,4 @@ class Game < Board
   end
 end
 
-# Game.new.start_game
+Game.new.start_game

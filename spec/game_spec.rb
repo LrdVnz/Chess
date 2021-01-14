@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require './lib/game'
-
+#gotta modify all calls to "move_piece" to add the argument "turns"...
 describe Game do
   before(:each) do
   allow_any_instance_of(Game).to receive(:puts)
+  allow_any_instance_of(Player).to receive(:puts)
+  allow_any_instance_of(Game).to receive(:ask_load)
   end
 
   describe '#start_game' do
@@ -52,6 +54,7 @@ describe Game do
     subject(:game_turn) { described_class.new }
     let(:turns_start) { game_turn.turns }
     let(:p1) { Player.new('white') }
+    let(:p2) { Player.new('black') }
 
     context 'when making an invalid move' do
       before do
@@ -65,6 +68,27 @@ describe Game do
         allow(game_turn).to receive(:win?).and_return(false, true)
         expect(game_turn.turns).to eq(turns_start)
         game_turn.turn_loop
+      end
+    end
+    
+    context 'when making a move to eat an enemy piece' do
+       before do 
+        game_turn.instance_variable_set(:@current_player, p1)
+        game_turn.instance_variable_set(:@p1, p1)
+        game_turn.instance_variable_set(:@p2, p2)
+        allow_any_instance_of(Board).to receive(:showboard)
+       end
+
+      it "plays correctly" do
+        whitePawn = Pawn.new([4,4], 'white')
+        blackPawn = Pawn.new([3,3], 'black')
+        game_turn.board[4][4] = whitePawn
+        game_turn.board[3][3] = blackPawn
+        allow(p1).to receive(:select_piece).and_return(whitePawn)
+        allow(p1).to receive(:ask_position).and_return([3,3])
+        allow(game_turn).to receive(:win?).and_return(true)
+        game_turn.turn_loop
+        expect(game_turn.board[3][3]).to be(whitePawn)
       end
     end
   end

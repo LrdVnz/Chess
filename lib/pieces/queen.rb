@@ -43,7 +43,7 @@ class Queen
     ]
   end
 
-  def check_move(goal, board)
+  def check_move(goal, board, turns = 1)
     is_valid = false
     @moves.each do |move|
       0.upto(7) do |i|
@@ -57,7 +57,10 @@ class Queen
   end
 
   def verify_condition(result, goal, move_cell)
-    result == goal && (move_cell == ' ' || move_cell.color != color)
+    puts "position[0] #{position[0]} \n"
+    puts "position[1] #{position[1]} \n"
+    result == goal && 
+    (move_cell == ' ' || move_cell.color != color)
   end
 
   def check_path(result, board)

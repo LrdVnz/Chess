@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+require 'pry'
 require_relative 'board'
 # class for the player. For holding color, controlling movement.
 class Player < Board

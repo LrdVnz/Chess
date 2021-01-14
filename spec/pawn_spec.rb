@@ -12,7 +12,7 @@ describe Pawn do
   end
 
   describe '#check_move' do
-    subject(:pawn_check) { described_class.new([1, 2], 'white') }
+    subject(:pawn_check) { described_class.new([1, 2], 'black') }
     let(:board) { Board.new.board }
 
     context 'when given a valid goal' do
@@ -75,8 +75,8 @@ describe Pawn do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Pawn.new([2, 0], 'white') }
-      let(:valid_goal) { [3, 0] }
+      let(:current_class) { Pawn.new([2, 1], 'white') }
+      let(:valid_goal) { [1, 1] }
       let(:invalid_goal) { [0, 7] }
     end
   end

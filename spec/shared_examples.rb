@@ -33,9 +33,9 @@ RSpec.shared_examples 'move_piece_shared' do
   end
 
   context 'when given a cell occupied by a piece of another color' do
-    let(:pawn) { Pawn.new([1, 0], 'black') }
 
     it 'Moves it to the cell' do
+      pawn = Pawn.new([1, 0], 'black')
       start_x = current_class.position[0]
       start_y = current_class.position[1]
       board[start_x][start_y] = current_class

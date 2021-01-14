@@ -25,7 +25,7 @@ describe Queen do
       end
     end
 
-    context 'when given a valid goal' do
+    context 'when given a invalid goal' do
       it 'returns false' do
         expect(queen_check.check_move([7, 5], board)).to be(false)
       end
@@ -46,7 +46,7 @@ describe Queen do
 
   context 'shared_example second' do
     include_examples 'move_piece_occupied_path' do
-      let(:current_class) { Queen.new([2, 1], 'white') }
+      let(:current_class) { Queen.new([2, 1], 'black') }
       let(:valid_goal) { [2, 4] }
       let(:invalid_goal) { [4, 3] }
     end
