@@ -46,7 +46,7 @@ class Bishop
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         move_cell = board[result[0]][result[1]] unless result.nil?
-        return is_valid = path_clear?(result, board) if verify_conditions(result, goal, move_cell)
+        return is_valid = check_path(result, board) if verify_conditions(result, goal, move_cell)
       end
     end
     is_valid
@@ -55,17 +55,7 @@ class Bishop
   def verify_conditions(result, goal, move_cell)
     result == goal && (move_cell == ' ' || move_cell.color != color)
   end
-
-  def path_clear?(result, board)
-    path_clear = check_path(result, board)
-    case path_clear
-    when false
-      false
-    else
-      true
-    end
-  end
-
+  
   def check_path(result, board)
     i = result[0]
     j = result[1]
