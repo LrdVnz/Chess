@@ -1,40 +1,45 @@
 # frozen_string_literal: true
-
+require './lib/game.rb'
 Dir['./lib/pieces/*.rb'].sort.each { |file| require file }
 # include bishop in second example ----> occupied path
 RSpec.shared_examples 'move_piece_shared' do
   before(:each) do
-    allow_any_instance_of(Board).to receive(:showboard)
+    #allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Game).to receive(:ask_load)
   end
 
-  let(:board_shared_ex) { Board.new }
-  let(:board) { board_shared_ex.board }
+  let(:game_shared) { Game.new }
+  let(:board) { game_shared.board }
 
   context 'when giving a valid goal for the piece' do
-    it 'moves piece to the goal' do
-      allow_any_instance_of(Board).to receive(:init_pieces)
-      board_shared_ex.move_piece(current_class, valid_goal, board)
-      expect(board[valid_goal[0]][valid_goal[1]]).to be(current_class)
+    before do 
+      allow(game_shared).to receive(:ask_input).and_return('black')
+      allow(game_shared).to receive(:turn_loop)
+      game_shared.start_game
+      allow_any_instance_of(Player).to receive(:text_select_piece)
     end
 
-    it 'resets to default the cell where the piece was' do
-      pos_x = current_class.position[0]
-      pos_y = current_class.position[1]
-      allow(board_shared_ex).to receive(:move_piece).with(current_class, valid_goal)
-      expect(board[pos_x][pos_y]).to eq(' ')
+    it 'moves piece to the goal and resets initial cell' do
+      verify_class = board[current_class.position[0]][current_class.position[1]]
+      game_shared.board[valid_goal[0]][valid_goal[1]] = ' '
+      allow_any_instance_of(Player).to receive(:input_piece).and_return([0,3])
+      allow_any_instance_of(Player).to receive(:ask_position).and_return([valid_goal[0], valid_goal[1]])
+      game_shared.do_move
+      expect(board[valid_goal[0]][valid_goal[1]]).to be(verify_class)
+      expect(board[current_class.position[0]][current_class.position[1]])
     end
   end
 
   context 'when giving an invalid goal' do
-    it "puts 'Invalid move!' " do
-      expect(board_shared_ex).to receive(:puts).with('Invalid move!')
+    xit "puts 'Invalid move!' " do
+      expect(board).to receive(:puts).with('Invalid move!')
       board_shared_ex.move_piece(current_class, invalid_goal, board)
     end
   end
 
   context 'when given a cell occupied by a piece of another color' do
 
-    it 'Moves it to the cell' do
+    xit 'Moves it to the cell' do
       pawn = Pawn.new([1, 0], 'black')
       start_x = current_class.position[0]
       start_y = current_class.position[1]

@@ -38,8 +38,8 @@ describe Queen do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Queen.new([2, 0], 'white') }
-      let(:valid_goal) { [6, 4] }
+      let(:current_class) { Queen.new([0, 3], 'black') }
+      let(:valid_goal) { [1, 2] }
       let(:invalid_goal) { %w[aaa eeeffff] }
     end
   end

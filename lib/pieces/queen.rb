@@ -48,8 +48,9 @@ class Queen
     @moves.each do |move|
       0.upto(7) do |i|
         new_move = [move[0][i], move[1][i]]
-        result = make_move(new_move)
-        move_cell = board[result[0]][result[1]] unless result.nil?
+        result = make_move(new_move) 
+        next if result.nil? 
+        move_cell = board[result[0]][result[1]]
         return is_valid = check_path(result, board) if verify_condition(result, goal, move_cell)
       end
     end
@@ -57,8 +58,16 @@ class Queen
   end
 
   def verify_condition(result, goal, move_cell)
+=begin
+    puts "------------ \n"
     puts "position[0] #{position[0]} \n"
     puts "position[1] #{position[1]} \n"
+    puts "goal #{goal}"
+    puts "result #{result}"
+    puts "move_cell #{move_cell}"
+    puts "color #{color}"
+    puts "------------ \n"
+=end
     result == goal && 
     (move_cell == ' ' || move_cell.color != color)
   end
@@ -67,9 +76,10 @@ class Queen
     is_clear = true
     i = result[0]
     j = result[1]
-    return is_clear = check_path_rook(i, j, board) if check_path_rook(i, j, board) == false
-    return is_clear = check_path_bishop(i, j, board) if check_path_bishop(i, j, board) == false
-
+    rook_checked = check_path_rook(i, j, board)
+    bishop_checked = check_path_bishop(i, j, board)
+    return is_clear = rook_checked if rook_checked == false
+    return is_clear = bishop_checked if bishop_checked == false
     is_clear
   end
 end
