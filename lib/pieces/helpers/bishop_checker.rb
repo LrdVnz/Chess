@@ -29,20 +29,20 @@ module BishopChecker
   end
 
   def check_bishop_vert_min
-    move_count = 0 
+    move_count = 0
     while @row > position[0]
       while @column > position[1]
         return @clear = false if move_count != 0 && check_cell == false
 
         @column -= 1
       end
-      move_count += 1 
+      move_count += 1
       @row -= 1
     end
   end
 
   def check_bishop_vert_max
-    move_count = 0 
+    move_count = 0
     while @row < position[0]
       while @column < position[1]
         return @clear = false if move_count != 0 && check_cell == false
@@ -55,7 +55,7 @@ module BishopChecker
   end
 
   def check_bishop_horiz_min
-    move_count = 0 
+    move_count = 0
     while @row > position[0]
       while @column < position[1]
         return @clear = false if move_count != 0 && check_cell == false
@@ -68,7 +68,7 @@ module BishopChecker
   end
 
   def check_bishop_horiz_max
-    move_count = 0 
+    move_count = 0
     while @row < position[0]
       while @column > position[1]
         return @clear = false if move_count != 0 && check_cell == false

@@ -26,7 +26,7 @@ describe Knight do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Knight.new([0, 1], 'white') }
+      let(:current_class) { Knight.new([0, 1], 'black') }
       let(:valid_goal) { [2, 2] }
       let(:invalid_goal) { [899, 1213] }
     end

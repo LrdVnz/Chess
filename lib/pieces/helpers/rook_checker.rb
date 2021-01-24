@@ -2,11 +2,11 @@
 
 # helpers for Rook and Queen, check path
 module RookChecker
-  def check_path_rook(row, column, board)
-    @row = row
-    @column = column
+  def check_path_rook(result, board)
+    @row = result[0]
+    @column = result[1]
     @board = board
-    @clear = false
+    @clear = true
     check_vertical
     check_horizontal
     @clear
@@ -29,7 +29,7 @@ module RookChecker
   end
 
   def check_vert_min
-    move_count = 0 
+    move_count = 0
     while @row > position[0]
       return @clear = false if move_count != 0 && check_cell == false
 
@@ -49,7 +49,7 @@ module RookChecker
   end
 
   def check_horiz_min
-    move_count = 0 
+    move_count = 0
     while @column > position[1]
       return @clear = false if move_count != 0 && check_cell == false
 
@@ -59,7 +59,7 @@ module RookChecker
   end
 
   def check_horiz_max
-    move_count = 0 
+    move_count = 0
     while @column < position[1]
       return @clear = false if move_count != 0 && check_cell == false
 
@@ -70,10 +70,9 @@ module RookChecker
 
   def check_cell
     current_cell = @board[@row][@column]
-    puts "current_cell #{current_cell}"
     return false if current_cell != ' ' &&
-                    current_cell != self &&
-                    current_cell.position[0] !=
-                    true
+                    current_cell != self
+
+    true
   end
 end

@@ -47,7 +47,7 @@ describe Bishop do
 
   context 'shared_example second' do
     include_examples 'move_piece_occupied_path' do
-      let(:current_class) { Bishop.new([0, 5], 'white') }
+      let(:current_class) { Bishop.new([0, 5], 'black') }
       let(:valid_goal) { [3, 2] }
       let(:invalid_goal) { [5, 4] }
     end

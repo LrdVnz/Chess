@@ -62,33 +62,44 @@ RSpec.shared_examples 'move_piece_shared' do
 end
 
 RSpec.shared_examples 'move_piece_occupied_path' do
-  let(:board_second_shared) { Board.new }
-  let(:pawn) { Pawn.new([2, 2], 'white') }
-  let(:board) { board_second_shared.board }
+  let(:game_second_shared) { Game.new }
+  let(:pawn) { Pawn.new([valid_goal[0], valid_goal[1]], 'black') }
+  let(:board) { game_second_shared.board }
 
   before(:each) do
+    allow_any_instance_of(Player).to receive(:puts)
     allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Game).to receive(:ask_load)
+    allow(game_second_shared).to receive(:ask_input).and_return('black')
+    allow(game_second_shared).to receive(:turn_loop)
+    game_second_shared.start_game
+    allow_any_instance_of(Player).to receive(:text_select_piece)
   end
 
   context 'when given a cell that is occupied by same color piece' do
-    it 'puts error' do
-      x = current_class.position[0]
-      y = current_class.position[1]
-      board[x][y] = current_class
-      board[2][2] = pawn
-      expect(board_second_shared).to receive(:puts).with('Invalid move!')
-      board_second_shared.move_piece(current_class, invalid_goal, board)
+    it "doesn't update cell" do
+      pos0 = current_class.position[0]
+      pos1 = current_class.position[1]
+      board[pos0][pos1] = current_class
+      board[valid_goal[0]][valid_goal[1]] = pawn
+      allow_any_instance_of(Player).to receive(:input_piece).and_return([pos0, pos1])
+      allow_any_instance_of(Player).to receive(:ask_position).and_return([valid_goal[0], valid_goal[1]])
+      allow(game_second_shared).to receive(:puts)
+      game_second_shared.do_move
+      expect(game_second_shared.board[valid_goal[0]][valid_goal[1]]).to be(pawn)
     end
   end
 
   context 'when given a cell where the path is occupied' do
-    it "returns 'Invalid move!' " do
-      current_class_x = current_class.position[0]
-      current_class_y = current_class.position[1]
-      board[current_class_x][current_class_y] = current_class
+    it "returns false " do
+      pos0 = current_class.position[0]
+      pos1 = current_class.position[1]
+      board[pos0][pos1] = current_class
       board[3][2] = pawn
-      expect(board_second_shared).to receive(:puts).with('Invalid move!')
-      board_second_shared.move_piece(current_class, invalid_goal, board)
+      allow_any_instance_of(Player).to receive(:input_piece).and_return([pos0, pos1])
+      allow_any_instance_of(Player).to receive(:ask_position).and_return([valid_goal[0], valid_goal[1]])
+      expect(game_second_shared).to receive(:do_move).and_return(false)
+      game_second_shared.do_move
     end
   end
 end

@@ -50,7 +50,6 @@ class Game < Board
     piece = @current_player.select_piece(board)
     puts 'Choose the goal cell'
     goal = @current_player.ask_position
-    puts "goaruu #{goal}"
     move_piece(piece, goal, board, turns)
   end
 

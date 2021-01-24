@@ -5,8 +5,8 @@ require_relative 'helpers/bishop_checker'
 
 # class for the bishop piece. Holds position, movement, color
 class Bishop
-  include Helpers
   include BishopChecker
+  include Helpers
   attr_reader :moves, :color
   attr_accessor :position
 
