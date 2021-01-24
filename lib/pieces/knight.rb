@@ -41,7 +41,7 @@ class Knight
     ]
   end
 
-  def check_move(goal, board, turns = 1)
+  def check_move(goal, board, _turns = 1)
     is_valid = false
     @movelist.each do |move|
       result = make_move(move)

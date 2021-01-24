@@ -34,17 +34,17 @@ describe Rook do
 
   context 'shared_example first' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Rook.new([2, 0], 'white') }
-      let(:valid_goal) { [5, 0] }
+      let(:current_class) { Rook.new([0, 0], 'white') }
+      let(:valid_goal) { [1, 0] }
       let(:invalid_goal) { ['dqwwwq', 20_200_202] }
     end
   end
 
   context 'shared example second' do
     include_examples 'move_piece_occupied_path' do
-      let(:current_class) { Rook.new([2, 2], 'white') }
+      let(:current_class) { Rook.new([0, 7], 'white') }
+      let(:valid_goal) { [1, 7] }
       let(:invalid_goal) { [7, 2] }
-      let(:valid_goal) { [2, 5] }
     end
   end
 end

@@ -75,8 +75,8 @@ describe Pawn do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Pawn.new([2, 1], 'white') }
-      let(:valid_goal) { [1, 1] }
+      let(:current_class) { Pawn.new([1, 5], 'black') }
+      let(:valid_goal) { [2, 6] }
       let(:invalid_goal) { [0, 7] }
     end
   end

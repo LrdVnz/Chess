@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'helpers/pieces_helpers'
-require_relative 'helpers/path_checker'
+require_relative 'helpers/rook_checker'
 
 # class for the rook piece. Holds position, movement, color
 class Rook
-  include PathChecker
   include Helpers
+  include RookChecker
   attr_reader :move, :color
   attr_accessor :position
 
@@ -39,7 +39,7 @@ class Rook
     end
   end
 
-  def check_move(goal, board, turns = 1)
+  def check_move(goal, board, _turns = 1)
     is_valid = false
     @moves.each do |move|
       0.upto(7) do |i|

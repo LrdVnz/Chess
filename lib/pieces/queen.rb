@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require_relative 'helpers/pieces_helpers'
-require_relative 'helpers/path_checker'
+require_relative 'helpers/bishop_checker'
+require_relative 'helpers/rook_checker'
 
 # class for the queen piece. Holds position, movement, color
 class Queen
-  include PathChecker
   include Helpers
+  include RookChecker
+  include BishopChecker
   attr_reader :moves, :color
   attr_accessor :position
 
@@ -43,14 +45,13 @@ class Queen
     ]
   end
 
-  def check_move(goal, board, turns = 1)
+  def check_move(goal, board, _turns = 1)
     is_valid = false
     @moves.each do |move|
       0.upto(7) do |i|
         new_move = [move[0][i], move[1][i]]
-        result = make_move(new_move) 
-        next if result.nil? 
-        move_cell = board[result[0]][result[1]]
+        result = make_move(new_move)
+        move_cell = board[result[0]][result[1]] unless result.nil?
         return is_valid = check_path(result, board) if verify_condition(result, goal, move_cell)
       end
     end
@@ -58,18 +59,17 @@ class Queen
   end
 
   def verify_condition(result, goal, move_cell)
-=begin
-    puts "------------ \n"
-    puts "position[0] #{position[0]} \n"
-    puts "position[1] #{position[1]} \n"
-    puts "goal #{goal}"
-    puts "result #{result}"
-    puts "move_cell #{move_cell}"
-    puts "color #{color}"
-    puts "------------ \n"
-=end
-    result == goal && 
-    (move_cell == ' ' || move_cell.color != color)
+    print "result #{result} \n"
+    print "golaa #{goal} \n"
+    print "idiagonallllllll #{result == goal}"
+    p "damovec3ll#{move_cell}"
+    print "#{move_cell == ' '} \n"
+    print '---------'
+    if move_cell == ' '
+      result == goal
+    else
+      result == goal && move_cell.color != color
+    end
   end
 
   def check_path(result, board)
@@ -80,6 +80,7 @@ class Queen
     bishop_checked = check_path_bishop(i, j, board)
     return is_clear = rook_checked if rook_checked == false
     return is_clear = bishop_checked if bishop_checked == false
+
     is_clear
   end
 end

@@ -36,11 +36,11 @@ class Board
   end
 
   def move_piece(piece, goal, passed_board, turns = 1)
+    showboard
     if piece.check_move(goal, passed_board, turns) == true
       reset_cell(piece.position)
-      piece.position = goal 
+      piece.position = goal
       insert_piece(piece, goal[0], goal[1])
-      showboard
     else
       puts 'Invalid move!'
       false

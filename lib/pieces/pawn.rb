@@ -28,7 +28,7 @@ class Pawn
     image
   end
 
-  def check_move(goal, board, turns = 1)
+  def check_move(goal, board, _turns = 1)
     if conditions_check_move
       multiple_moves(goal, board)
     else
@@ -43,16 +43,21 @@ class Pawn
   end
 
   def multiple_moves(goal, board)
-    puts "muuuuuuuuultipleeeeeeeeeeeeee"
     is_valid = false
     moves.each_value do |move|
       result = make_move(move)
-      next if result.nil?
-
-      move_cell = board[result[0]][result[1]]
-      return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
+      move_cell = board[result[0]][result[1]] unless result.nil?
+      return is_valid = true if check_diagonal(result, goal, move_cell)
     end
     is_valid
+  end
+
+  def check_diagonal(result, goal, move_cell)
+    if move_cell == ' '
+      result == goal
+    else
+      move_cell.color != color && result && goal
+    end
   end
 
   def move_forward_check(goal, board)
@@ -69,7 +74,7 @@ class Pawn
 
   def verify_diagonal(result, goal, key, move_cell)
     result == goal && key.match(/eat_right|eat_left/) &&
-    move_cell != ' ' && move_cell.color != color
+      move_cell != ' ' && move_cell.color != color
   end
 
   def verify_standard(result, goal, key, move_cell)

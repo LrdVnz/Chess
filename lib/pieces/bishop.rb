@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'helpers/pieces_helpers'
-require_relative 'helpers/path_checker'
+require_relative 'helpers/bishop_checker'
 
 # class for the bishop piece. Holds position, movement, color
 class Bishop
-  include PathChecker
   include Helpers
+  include BishopChecker
   attr_reader :moves, :color
   attr_accessor :position
 
@@ -39,14 +39,14 @@ class Bishop
     ]
   end
 
-  def check_move(goal, board, turns = 1)
+  def check_move(goal, board, _turns = 1)
     is_valid = false
     @moves.each do |move|
       0.upto(7) do |i|
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         move_cell = board[result[0]][result[1]] unless result.nil?
-        return is_valid = check_path(result, board) if verify_conditions(result, goal, move_cell)
+        return is_valid = check_path_bishop(result, board) if verify_conditions(result, goal, move_cell)
       end
     end
     is_valid
@@ -54,11 +54,5 @@ class Bishop
 
   def verify_conditions(result, goal, move_cell)
     result == goal && (move_cell == ' ' || move_cell.color != color)
-  end
-  
-  def check_path(result, board)
-    i = result[0]
-    j = result[1]
-    check_path_bishop(i, j, board)
   end
 end

@@ -6,11 +6,11 @@ require_relative 'shared_examples'
 
 describe Bishop do
   before(:each) do
-    allow_any_instance_of(Board).to receive(:showboard)
+    # allow_any_instance_of(Board).to receive(:showboard)
   end
 
   describe '#check_move' do
-    subject(:bishop_check) { described_class.new([0, 2], 'white') }
+    subject(:bishop_check) { described_class.new([0, 2], 'black') }
     let(:board) { Board.new.board }
 
     context 'when given valid goal' do
@@ -21,6 +21,7 @@ describe Bishop do
 
       it 'returns true again' do
         allow_any_instance_of(Board).to receive(:init_pieces)
+        board[0][2] = bishop_check
         expect(bishop_check.check_move([2, 0], board)).to be(true)
       end
     end
@@ -38,16 +39,16 @@ describe Bishop do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Bishop.new([2, 0], 'white') }
-      let(:valid_goal) { [4, 2] }
+      let(:current_class) { Bishop.new([0, 2], 'black') }
+      let(:valid_goal) { [1, 3] }
       let(:invalid_goal) { [10, 50] }
     end
   end
 
   context 'shared_example second' do
     include_examples 'move_piece_occupied_path' do
-      let(:current_class) { Bishop.new([2, 1], 'white') }
-      let(:valid_goal) { [4, 4] }
+      let(:current_class) { Bishop.new([0, 5], 'white') }
+      let(:valid_goal) { [3, 2] }
       let(:invalid_goal) { [5, 4] }
     end
   end

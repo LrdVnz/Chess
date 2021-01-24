@@ -39,8 +39,8 @@ describe King do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { King.new([2, 0], 'white') }
-      let(:valid_goal) { [3, 1] }
+      let(:current_class) { King.new([0, 4], 'white') }
+      let(:valid_goal) { [1, 5] }
       let(:invalid_goal) { [0o000, 99_999] }
     end
   end

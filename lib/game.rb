@@ -48,9 +48,8 @@ class Game < Board
   def do_move
     @current_player.text_select_piece
     piece = @current_player.select_piece(board)
-    puts "Choose the goal cell"
+    puts 'Choose the goal cell'
     goal = @current_player.ask_position
-    puts "goaruu #{goal}"
     move_piece(piece, goal, board, turns)
   end
 
@@ -78,4 +77,4 @@ class Game < Board
   end
 end
 
-#Game.new.start_game
+# Game.new.start_game
