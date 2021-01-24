@@ -50,8 +50,9 @@ class Queen
     @moves.each do |move|
       0.upto(7) do |i|
         new_move = [move[0][i], move[1][i]]
-        result = make_move(new_move)
-        move_cell = board[result[0]][result[1]] unless result.nil?
+        result = make_move(new_move) 
+        next if result.nil? 
+        move_cell = board[result[0]][result[1]]
         return is_valid = check_path(result, board) if verify_condition(result, goal, move_cell)
       end
     end
@@ -80,7 +81,6 @@ class Queen
     bishop_checked = check_path_bishop(i, j, board)
     return is_clear = rook_checked if rook_checked == false
     return is_clear = bishop_checked if bishop_checked == false
-
     is_clear
   end
 end
