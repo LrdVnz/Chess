@@ -25,6 +25,10 @@ module Helpers
   end
 
   def verify_condition(result, goal, move_cell)
-    result == goal && (move_cell == ' ' || move_cell.color != color)
+    if move_cell == ' '
+      result == goal
+    else
+      result == goal && move_cell.color != color
+    end
   end
 end

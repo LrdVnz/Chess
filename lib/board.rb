@@ -10,6 +10,7 @@ class Board
   def initialize
     @board = create_board
     init_pieces
+    @board
   end
 
   def create_board
@@ -32,7 +33,6 @@ class Board
     black_side_pawns
     white_side_first
     white_side_pawns
-    @board
   end
 
   def move_piece(piece, goal, passed_board, turns = 1)

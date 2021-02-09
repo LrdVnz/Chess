@@ -46,9 +46,17 @@ class King
     moves.each do |move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      # frozen_string_literal: true
       return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
     end
     is_valid
+  end
+
+  def possible_moves(_board)
+    all_results = []
+    moves.each do |move|
+      result = make_move(move)
+      all_results << result unless result.nil?
+    end
+    all_results
   end
 end

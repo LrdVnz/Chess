@@ -36,6 +36,15 @@ class Pawn
     end
   end
 
+  def possible_moves(_board)
+    all_results = []
+    moves.each_value do |move|
+      result = make_move(move)
+      all_results << result unless result.nil?
+    end
+    all_results
+  end
+
   private
 
   def conditions_check_move
@@ -56,7 +65,7 @@ class Pawn
     if move_cell == ' '
       result == goal
     else
-      move_cell.color != color && result && goal
+      move_cell.color != color && result == goal
     end
   end
 

@@ -18,31 +18,40 @@ describe Game do
     end
 
     context 'when given a valid input' do
-      it 'creates the player' do
+      before do 
         allow(game_start).to receive(:ask_input).and_return('white')
         allow(game_start).to receive(:turn_loop)
+      end
+
+      it 'creates the player' do
         game_start.start_game
         expect(game_start.p1.color).to eq('white')
       end
     end
 
     context 'when given an invalid input once' do
-      it 'puts error message' do
-        initial_message = 'Choose your color. Black or White.'
+      before do 
         allow(game_start).to receive(:gets).and_return('aaaaaaa', 'white')
         allow(game_start).to receive(:turn_loop)
+      end
+
+      it 'puts error message' do
+        initial_message = 'Choose your color. Black or White.'
         expect(game_start).to receive(:puts).with(initial_message).twice
         game_start.start_game
       end
     end
 
     context 'when playing a turn with a valid move' do
-      it 'changes turn and current_player' do
+      before do 
         allow(game_start).to receive(:ask_input).and_return('white')
         allow_any_instance_of(Player).to receive(:text_select_piece)
         allow_any_instance_of(Player).to receive(:select_piece).and_return(sample_piece)
         allow_any_instance_of(Player).to receive(:ask_position).and_return([2, 3])
         allow(game_start).to receive(:win?).and_return(true)
+      end
+
+      it 'changes turn and current_player' do
         game_start.start_game
         expect(game_start.board[2][3]).to be_instance_of(Pawn)
         expect(game_start.turns).to eq(2)
@@ -59,6 +68,8 @@ describe Game do
     context 'when making an invalid move' do
       before do
         game_turn.instance_variable_set(:@current_player, p1)
+        game_turn.instance_variable_set(:@p1, p1)
+        game_turn.instance_variable_set(:@p2, p2)
         allow_any_instance_of(Player).to receive(:do_move).and_return(false, true)
         allow_any_instance_of(Board).to receive(:showboard)
       end
@@ -91,6 +102,121 @@ describe Game do
         expect(game_turn.board[3][3]).to be(whitePawn)
       end
     end
+  end
+
+  describe "#get_enemy_pieces" do     
+    subject(:game_get_enemy) { described_class.new }
+    let(:turns_start) { game_turn.turns }
+
+       context "when the enemy is of 'black' color" do
+        before do  
+          allow(game_get_enemy).to receive(:ask_input).and_return('white')
+          allow(game_get_enemy).to receive(:turn_loop)
+          game_get_enemy.start_game
+          allow_any_instance_of(Player).to receive(:text_select_piece)
+        end
+
+         it "returns only black pieces" do
+          enemy_pieces = game_get_enemy.all_enemy_pieces
+          expect(enemy_pieces.flatten.all? { |piece| piece.color == 'black'}).to be(true)               
+        end
+       end
+
+       context "when the enemy is of 'white' color" do
+        
+        before do 
+          allow(game_get_enemy).to receive(:ask_input).and_return('black')
+          allow(game_get_enemy).to receive(:turn_loop)
+          game_get_enemy.start_game
+          allow_any_instance_of(Player).to receive(:text_select_piece)
+        end
+
+        it "returns only white pieces" do
+         enemy_pieces = game_get_enemy.all_enemy_pieces
+         expect(enemy_pieces.flatten.all? { |piece| piece.color == 'white'}).to be(true)               
+       end
+      end
+  end
+   
+  describe "#all_possible_moves" do 
+    let(:game_possible_moves) { described_class.new }
+    let(:turns_start) { game_turn.turns }
+
+    before do 
+      allow(game_possible_moves).to receive(:ask_input).and_return('black')
+      allow(game_possible_moves).to receive(:turn_loop)
+      game_possible_moves.start_game
+      allow_any_instance_of(Player).to receive(:text_select_piece)
+      game_possible_moves.instance_variable_set(:@enemy_pieces, game_possible_moves.all_enemy_pieces)
+    end
+
+      context "when given the enemy pieces" do
+         it "calculates all possible moves" do
+           moves = game_possible_moves.all_possible_moves
+           expect(moves).to be_instance_of(Array)
+         end
+     end
+  end
+
+  describe "#verify_king_check" do
+    let(:game_king_check) { described_class.new }
+    let(:turns_start) { game_turn.turns }
+
+    before do 
+      allow(game_king_check).to receive(:ask_input).and_return('black')
+      allow(game_king_check).to receive(:turn_loop)
+      game_king_check.start_game
+      allow_any_instance_of(Player).to receive(:text_select_piece)
+    end
+
+       context "when king isn't in check" do 
+         it "returns false" do
+           expect(game_king_check.verify_king_check).to be(false)
+         end
+       end
+
+       context "when king is in check" do 
+        before do 
+         game_king_check.board[5][0] = King.new([5,0], 'black')
+        end
+
+        it "returns true" do 
+          expect(game_king_check.verify_king_check).to be(true)
+        end 
+       end
+  end
+
+
+  describe '#verify_checkmate' do    
+    before do
+      allow_any_instance_of(Board).to receive(:init_pieces)  
+    end
+
+    let(:game_checkmate) { described_class.new }
+    let(:turns_start) { game_turn.turns }
+    
+    before do 
+      allow(game_checkmate).to receive(:ask_input).and_return('black')
+      allow(game_checkmate).to receive(:turn_loop)
+      game_checkmate.start_game
+      allow_any_instance_of(Player).to receive(:text_select_piece)
+    end
+    
+    context 'when king is in checkmate' do
+      
+      before do 
+        game_checkmate.board[0][2] = Rook.new([0,2], 'white')        
+        game_checkmate.board[3][2] = Pawn.new([3,2], 'white')
+        game_checkmate.board[3][5] = Queen.new([3,5], 'white')
+        game_checkmate.board[1][4] = King.new([1,4], 'black')
+      end
+
+      it 'makes enemy the winner' do
+        game_checkmate.verify_checkmate
+        expect(game_checkmate.winner).to eq(game_checkmate.enemy)
+      end
+    end
+
   end
 
   context 'Save game module' do
