@@ -7,12 +7,13 @@ require_relative 'game_save_module'
 # main game script
 class Game < Board
   include SaveGame
-  attr_accessor :winner, :enemy, :turns, :current_player
+  attr_accessor :winner, :won, :enemy, :turns, :current_player
   attr_reader :board, :p1, :p2, :saves_path
 
   def initialize
-    @winner = nil 
-    @enemy = nil 
+    @winner = nil
+    @enemy = nil
+    @won = false 
     @turns = 1
     @board = super
     @current_player = nil
@@ -34,7 +35,7 @@ class Game < Board
   end
 
   def turn_loop
-    while winner == nil
+    while won == false
       showboard
       verify_checkmate
       puts "current player is #{@current_player.color}" unless current_player.nil?
@@ -43,6 +44,7 @@ class Game < Board
         @turns += 1
         @current_player = @current_player == @p1 ? @p2 : @p1
       end
+      @won = win?
     end
   end
 
@@ -139,6 +141,10 @@ class Game < Board
     @p1 = Player.new('white')
     @p2 = Player.new('black')
     @current_player = @p1
+  end
+
+  def win? 
+    @winner == nil ? false : true
   end
 end
 
