@@ -6,7 +6,8 @@ require_relative 'shared_examples'
 
 describe Bishop do
   before(:each) do
-    # allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Game).to receive(:ask_save)
   end
 
   describe '#check_move' do

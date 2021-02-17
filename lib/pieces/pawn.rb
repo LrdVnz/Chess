@@ -55,7 +55,9 @@ class Pawn
     is_valid = false
     moves.each_value do |move|
       result = make_move(move)
-      move_cell = board[result[0]][result[1]] unless result.nil?
+      next if result.nil?
+
+      move_cell = board[result[0]][result[1]]
       return is_valid = true if check_diagonal(result, goal, move_cell)
     end
     is_valid
@@ -95,7 +97,7 @@ class Pawn
     when 'white'
       @image = '♙'
     when 'black'
-      @image = '♟︎'
+      @image = "\u265F"
     end
   end
 

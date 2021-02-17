@@ -7,6 +7,8 @@ describe Game do
     allow_any_instance_of(Game).to receive(:puts)
     allow_any_instance_of(Player).to receive(:puts)
     allow_any_instance_of(Game).to receive(:ask_load)
+    allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Game).to receive(:ask_save)
   end
 
   describe '#start_game' do
@@ -14,7 +16,6 @@ describe Game do
     let(:sample_piece) { Pawn.new([1, 3], 'black') }
 
     before(:each) do
-      allow_any_instance_of(Board).to receive(:showboard)
     end
 
     context 'when given a valid input' do
@@ -188,24 +189,20 @@ describe Game do
   end
 
   describe '#verify_checkmate' do
-    before do
+    before(:each) do
       allow_any_instance_of(Board).to receive(:init_pieces)
-    end
-
-    let(:game_checkmate) { described_class.new }
-    let(:turns_start) { game_turn.turns }
-
-    before do
-      allow(game_checkmate).to receive(:ask_input).and_return('black')
-      allow(game_checkmate).to receive(:turn_loop)
-      game_checkmate.start_game
+      allow_any_instance_of(Game).to receive(:ask_input).and_return('black')
+      allow_any_instance_of(Game).to receive(:turn_loop)
       allow_any_instance_of(Player).to receive(:text_select_piece)
     end
 
     context 'when king is in checkmate' do
+      let(:game_checkmate) { described_class.new }
+
       before do
+        game_checkmate.start_game
         game_checkmate.board[0][2] = Rook.new([0, 2], 'white')
-        game_checkmate.board[3][2] = Pawn.new([3, 2], 'white')
+        game_checkmate.board[3][2] = Bishop.new([3, 2], 'white')
         game_checkmate.board[3][5] = Queen.new([3, 5], 'white')
         game_checkmate.board[1][4] = King.new([1, 4], 'black')
       end
@@ -213,6 +210,23 @@ describe Game do
       it 'makes enemy the winner' do
         game_checkmate.verify_checkmate
         expect(game_checkmate.winner).to eq(game_checkmate.enemy)
+      end
+    end
+
+    context 'when king is in check but not in checkmate' do
+      let(:game_nomate) { described_class.new }
+
+      before do
+        game_nomate.start_game
+        game_nomate.board[1][2] = King.new([1, 2], 'black')
+        game_nomate.board[2][1] = Queen.new([2, 1], 'white')
+        game_nomate.board[3][2] = Rook.new([3, 2], 'white')
+        allow_any_instance_of(Player).to receive(:ask_position).and_return([1, 3])
+      end
+
+      it 'lets the king move away from check' do
+        game_nomate.verify_checkmate
+        expect(game_nomate.board[1][3]).to be_instance_of(King)
       end
     end
   end

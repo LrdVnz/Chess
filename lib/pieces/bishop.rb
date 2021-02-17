@@ -60,13 +60,18 @@ class Bishop
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         next if result.nil?
-
+        
+        check_valid_cell(board, result)
         move_cell = board[result[0]][result[1]]
         is_valid = check_path_bishop(result, board) if verify_conditions(result, result, move_cell)
         all_results << result unless is_valid == false
       end
     end
     all_results
+  end
+
+  def check_valid_cell(board, result)
+    
   end
 
   def verify_conditions(result, goal, move_cell)

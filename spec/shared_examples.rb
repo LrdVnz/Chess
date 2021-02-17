@@ -18,7 +18,7 @@ RSpec.shared_examples 'move_piece_shared' do
   let(:board) { game_shared.board }
 
   context 'when giving a valid goal for the piece' do
-    before do 
+    before do
       @pos0 = current_class.position[0]
       @pos1 = current_class.position[1]
       @verify_class = board[@pos0][@pos1]
@@ -36,7 +36,7 @@ RSpec.shared_examples 'move_piece_shared' do
   end
 
   context 'when giving an invalid goal' do
-    before do 
+    before do
       @pos0 = current_class.position[0]
       @pos1 = current_class.position[1]
       allow_any_instance_of(Player).to receive(:input_piece).and_return([@pos0, @pos1])
@@ -52,8 +52,7 @@ RSpec.shared_examples 'move_piece_shared' do
   end
 
   context 'when given a cell occupied by a piece of another color' do
-
-    before do 
+    before do
       @pawn = Pawn.new([valid_goal[0], valid_goal[1]], 'white')
       @pos0 = current_class.position[0]
       @pos1 = current_class.position[1]
@@ -61,7 +60,7 @@ RSpec.shared_examples 'move_piece_shared' do
       board[valid_goal[0]][valid_goal[1]] = @pawn
       allow_any_instance_of(Player).to receive(:input_piece).and_return([@pos0, @pos1])
       allow_any_instance_of(Player).to receive(:ask_position).and_return([valid_goal[0], valid_goal[1]])
-      allow(game_shared).to receive(:puts)     
+      allow(game_shared).to receive(:puts)
     end
 
     it 'Moves it to the cell' do
@@ -87,7 +86,7 @@ RSpec.shared_examples 'move_piece_occupied_path' do
   end
 
   context 'when given a cell that is occupied by same color piece' do
-    before do 
+    before do
       @pos0 = current_class.position[0]
       @pos1 = current_class.position[1]
       board[@pos0][@pos1] = current_class
@@ -104,7 +103,7 @@ RSpec.shared_examples 'move_piece_occupied_path' do
   end
 
   context 'when given a cell where the path is occupied' do
-    before do 
+    before do
       @pos0 = current_class.position[0]
       @pos1 = current_class.position[1]
       board[@pos0][@pos1] = current_class
