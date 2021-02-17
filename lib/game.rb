@@ -42,7 +42,6 @@ class Game < Board
     end
   end
 
-
   def do_move
     @current_player.text_select_piece
     piece = @current_player.select_piece(board)
@@ -72,13 +71,13 @@ class Game < Board
       start_white
     end
   end
-  
+
   def verify_move
     move = do_move
     return unless move != false
-    
-      @turns += 1
-      @current_player = @current_player == @p1 ? @p2 : @p1
+
+    @turns += 1
+    @current_player = @current_player == @p1 ? @p2 : @p1
   end
 
   def start_black

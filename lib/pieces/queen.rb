@@ -69,20 +69,23 @@ class Queen
   end
 
   def possible_moves(board)
-    is_valid = false
-    all_results = []
+    @all_results = []
     @moves.each do |move|
       0.upto(7) do |i|
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         next if result.nil?
 
-        move_cell = board[result[0]][result[1]]
-        is_valid = check_path(result, board) if verify_condition(result, result, move_cell)
-        all_results << result unless is_valid == false
+        check_valid_cell(board, result)
       end
     end
-    all_results
+    @all_results
+  end
+
+  def check_valid_cell(board, result)
+    move_cell = board[result[0]][result[1]]
+    is_valid = check_path(result, board) if verify_condition(result, result, move_cell)
+    @all_results << result unless is_valid == false
   end
 
   def check_path(result, board)

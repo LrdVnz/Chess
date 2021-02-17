@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+#helper module to store the function for verifying check and checkmate
 module VerifyCheckmate
   def verify_checkmate
     return @winner = @enemy if verify_king_check == true &&
@@ -13,18 +14,22 @@ module VerifyCheckmate
       row.each  do |cell|
         next if cell == ' '
 
-        piece = cell if cell.instance_of?(King) &&
+        piece = cell if cell.instance_of?(King) && 
                         cell.color == @current_player.color
       end
     end
-    return false if is_checkmate?(piece) == true
+    return false if checkmate?(piece) == true
 
+    move_king(piece)
+  end
+
+  def move_king(piece)
     puts 'Choose the goal cell'
     goal = @current_player.ask_position
     move_piece(piece, goal, board, turns)
   end
 
-  def is_checkmate?(king)
+  def checkmate?(king)
     king_moves = king.possible_moves(board)
     return true if (king_moves & @all_enemy_moves.flatten(1)).length == king_moves.length
 
