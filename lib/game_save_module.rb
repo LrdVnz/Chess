@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'colorize'
 
 # module for the methods regarding saving, loading the save files
 module SaveGame

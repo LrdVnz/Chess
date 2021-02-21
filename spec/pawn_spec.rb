@@ -73,6 +73,14 @@ describe Pawn do
     end
   end
 
+  describe "#save_move" do
+    context "when saving the move" do
+         it "saves and overwrites the file" do
+           
+         end
+    end
+  end
+
   context 'shared_example' do
     include_examples 'move_piece_shared' do
       let(:current_class) { Pawn.new([1, 5], 'black') }

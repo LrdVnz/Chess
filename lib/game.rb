@@ -19,7 +19,7 @@ class Game < Board
     @turns = 1
     @board = super
     @current_player = nil
-    @saves_path = '/home/vincenzo/Development/the-odin-project-main/Ruby/chess/saves/'
+    @saves_path = '/home/vincenzo/Documenti/Development/Ruby/Chess/saves/'
   end
 
   def start_game
@@ -33,8 +33,8 @@ class Game < Board
 
   def turn_loop
     while won == false
-      ask_save
       showboard
+      ask_save
       verify_checkmate
       puts "current player is #{@current_player.color}" unless current_player.nil?
       verify_move

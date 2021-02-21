@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#helper module to store the function for verifying check and checkmate
+# helper module to store the function for verifying check and checkmate
 module VerifyCheckmate
   def verify_checkmate
     return @winner = @enemy if verify_king_check == true &&
@@ -14,7 +14,7 @@ module VerifyCheckmate
       row.each  do |cell|
         next if cell == ' '
 
-        piece = cell if cell.instance_of?(King) && 
+        piece = cell if cell.instance_of?(King) &&
                         cell.color == @current_player.color
       end
     end

@@ -11,6 +11,7 @@ class Pawn
   def initialize(position, color)
     @position = position
     @color = color
+    @save_move_path = '/home/vincenzo/Documenti/Development/Ruby/Chess/saves/pawn_move'
     movelist
     image
   end
@@ -58,7 +59,10 @@ class Pawn
       next if result.nil?
 
       move_cell = board[result[0]][result[1]]
-      return is_valid = true if check_diagonal(result, goal, move_cell)
+       if check_diagonal(result, goal, move_cell) != false
+        save_move(move) 
+        return is_valid = true
+       end
     end
     is_valid
   end
@@ -71,9 +75,14 @@ class Pawn
     end
   end
 
+  def save_move(move)
+    json = {'move' => @move, 'piece' => self }.to_json
+    File.open(@save_move_path + 'last_pawn_move', 'w') { |f| f << json }
+  end
+
   def move_forward_check(goal, board)
     is_valid = false
-    less_moves = @moves.reject { |k, _v| k == 'first_move' }
+    less_moves = @moves.reject { |k, _v| k == 'double_step' }
     less_moves.each do |key, move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
@@ -104,7 +113,7 @@ class Pawn
   def moves_white
     {
       'standard' => [-1, 0],
-      'first_move' => [-2, 0],
+      'double_step' => [-2, 0],
       'eat_right' => [-1, +1],
       'eat_left' => [-1, -1]
     }
@@ -113,7 +122,7 @@ class Pawn
   def moves_black
     {
       'standard' => [+1, 0],
-      'first_move' => [+2, 0],
+      'double_step' => [+2, 0],
       'eat_right' => [+1, +1],
       'eat_left' => [+1, -1]
     }
