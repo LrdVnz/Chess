@@ -93,6 +93,20 @@ describe Pawn do
     end
   end
 
+  describe "#load_move" do
+    subject(:pawn_load) { described_class.new([1, 2], 'black') }
+    
+    context "when loading a move" do
+      it "loads correctly" do
+        sample_pawn = Pawn.new([3,3], 'white')
+        sample_pawn.save_move(sample_pawn.moves['double_step'])
+        pawn_load.load_move
+        previous_move = pawn_load.instance_variable_get(:@previous_move)
+        expect(previous_move['color']).to eq('white')
+      end
+    end
+  end
+
   context 'shared_example' do
 
     before(:each) do
