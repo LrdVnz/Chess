@@ -5,13 +5,13 @@ require_relative 'helpers/pieces_helpers'
 # class for the pawn piece. Holds position, movement, color
 class Pawn
   include Helpers
-  attr_reader :color
+  attr_reader :color, :save_move_path
   attr_accessor :position, :moves
 
   def initialize(position, color)
     @position = position
     @color = color
-    @save_move_path = '/home/vincenzo/Documenti/Development/Ruby/Chess/saves/pawn_move'
+    @save_move_path = '/home/vincenzo/Documenti/Development/Ruby/Chess/saves/pawn_move/'
     movelist
     image
   end
@@ -46,6 +46,12 @@ class Pawn
     all_results
   end
 
+  def save_move(move)
+    json = {'move' => move, 'piece' => itself,
+            'position' => @position , 'color' => color}.to_json
+    File.open(@save_move_path + 'last_pawn_move', 'w') { |f| f << json }
+  end
+
   private
 
   def conditions_check_move
@@ -73,11 +79,6 @@ class Pawn
     else
       move_cell.color != color && result == goal
     end
-  end
-
-  def save_move(move)
-    json = {'move' => @move, 'piece' => self }.to_json
-    File.open(@save_move_path + 'last_pawn_move', 'w') { |f| f << json }
   end
 
   def move_forward_check(goal, board)

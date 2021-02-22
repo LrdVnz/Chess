@@ -15,6 +15,10 @@ describe Pawn do
     subject(:pawn_check) { described_class.new([1, 2], 'black') }
     let(:board) { Board.new.board }
 
+    before(:each) do
+     allow_any_instance_of(Pawn).to receive(:save_move)
+    end
+
     context 'when given a valid goal' do
       it 'should return true ' do
         expect(pawn_check.check_move([2, 2], board)).to be(true)
@@ -74,14 +78,27 @@ describe Pawn do
   end
 
   describe "#save_move" do
+    subject(:pawn_save) { described_class.new([1, 2], 'black') }
+    
+    after(:each) do
+      File.delete("#{pawn_save.save_move_path}last_pawn_move")
+    end
+
     context "when saving the move" do
          it "saves and overwrites the file" do
-           
+          double_step = pawn_save.moves['double_step']
+          pawn_save.save_move(double_step)
+          expect(File).to exist("#{pawn_save.save_move_path}last_pawn_move")
          end
     end
   end
 
   context 'shared_example' do
+
+    before(:each) do
+      allow_any_instance_of(Pawn).to receive(:save_move)
+     end
+
     include_examples 'move_piece_shared' do
       let(:current_class) { Pawn.new([1, 5], 'black') }
       let(:valid_goal) { [2, 6] }

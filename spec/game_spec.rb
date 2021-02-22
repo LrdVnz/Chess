@@ -235,6 +235,10 @@ describe Game do
     describe '#save' do
       subject(:game_save) { described_class.new }
 
+      after(:each) do
+        File.delete("#{game_save.saves_path}save2")
+      end
+
       context 'when saving a game' do
         it 'correctly creates the save file' do
           allow(game_save).to receive(:gets).and_return('save2')
@@ -251,7 +255,7 @@ describe Game do
         it 'loads the file correctly' do
           p1 = game_load.p1
           p2 = game_load.p2
-          allow(game_load).to receive(:gets).and_return('save1', 'save1')
+          allow(game_load).to receive(:gets).and_return('save_sample', 'save_sample')
           game_load.save
           game_load.load
           expect(game_load.p1).to be(p1)
