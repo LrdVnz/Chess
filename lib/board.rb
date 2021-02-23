@@ -36,10 +36,16 @@ class Board
   end
 
   def move_piece(piece, goal, passed_board, turns = 1)
-    if piece.check_move(goal, passed_board, turns) == true
+    move_checked = piece.check_move(goal, passed_board, turns)
+    if move_checked == true
       reset_cell(piece.position)
       piece.position = goal
       insert_piece(piece, goal[0], goal[1])
+    elsif move_checked['name'] == 'en_passant'
+      reset_cell(piece.position)
+      reset_cell(move_checked['enemy_pos'])
+      piece.position = goal
+      insert_piece(piece, , goal[1])
     else
       puts 'Invalid move!'
       false

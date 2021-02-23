@@ -98,11 +98,33 @@ describe Pawn do
     
     context "when loading a move" do
       it "loads correctly" do
-        sample_pawn = Pawn.new([3,3], 'white')
+        sample_pawn = Pawn.new([6,3], 'white')
         sample_pawn.save_move(sample_pawn.moves['double_step'])
-        pawn_load.load_move
+        pawn_load.load_move([4,3])
         previous_move = pawn_load.instance_variable_get(:@previous_move)
         expect(previous_move['color']).to eq('white')
+      end
+    end
+  end
+
+  describe "#en_passant" do 
+    before do
+      allow_any_instance_of(Board).to receive(:init_pieces)   
+    end
+
+    subject(:pawn_enpassant) { described_class.new([4, 2], 'black') }
+    let(:board) { Board.new.board }
+     
+    context "when doing an en passant" do
+      before(:each) do
+        sample_pawn = Pawn.new([6,3], 'white')
+        board[6][3] = sample_pawn
+        board[4][2] = pawn_enpassant
+        sample_pawn.save_move(sample_pawn.moves['double_step'])   
+      end
+
+      it "returns true" do
+        expect(pawn_enpassant.en_passant([5,3], board)).to be(true)
       end
     end
   end

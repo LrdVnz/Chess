@@ -81,10 +81,12 @@ class Pawn
     less_moves.each do |key, move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      return is_valid = true if verify_diagonal(result, goal, key, move_cell)
+      if check_diagonal(result, goal, move_cell)
+       is_valid = {'name' => 'en_passant', 'enemy_pos' >= @previous_move['position'] }
+
+      end
     end
     is_valid
-
   end
 
   def save_move(move)
@@ -98,15 +100,15 @@ class Pawn
     data = JSON.parse(move_save)
     @previous_move = { 'move' => data['move'], 'piece' => data['piece'],
                        'position' => data['position'], 'color' => data['color'] }
-    verify_en_passant(previous_move, goal)
+    verify_en_passant(@previous_move, goal)
   end
 
-  private
+  private 
 
   def verify_en_passant(previous_move, goal)
     return true if previous_move['move'] == 'double_step' && previous_move['color'] != color &&
                    (previous_move['position'][1] == position[1] + 1 || previous_move['position'][1] == position[1] - 1) &&
-                   (goal == make_move(@moves['eat_right']) || goal == make_move(@moves['eat_left'])
+                   (goal == make_move(@moves['eat_right']) || goal == make_move(@moves['eat_left']))
 
     false
   end
