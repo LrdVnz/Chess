@@ -30,9 +30,9 @@ class Pawn
   end
 
   def check_move(goal, board, _turns = 1)
-   if load_move(goal) == true 
-      en_passant(goal, board) 
-   elsif conditions_check_move
+    if load_move(goal) == true
+      en_passant(goal, board)
+    elsif conditions_check_move
       multiple_moves(goal, board)
     else
       move_forward_check(goal, board)
@@ -76,14 +76,14 @@ class Pawn
   end
 
   def en_passant(goal, board)
+    load_move(goal)
     is_valid = false
-    less_moves = @moves.reject { |k, _v| k == 'double_step' || k == 'standard'}
-    less_moves.each do |key, move|
+    less_moves = @moves.reject { |k, _v| %w[double_step standard].include?(k) }
+    less_moves.each do |_key, move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
       if check_diagonal(result, goal, move_cell)
-       is_valid = {'name' => 'en_passant', 'enemy_pos' >= @previous_move['position'] }
-
+        is_valid = { 'name' => 'en_passant', 'enemy_pos' => @previous_move['position'] }
       end
     end
     is_valid
@@ -103,7 +103,7 @@ class Pawn
     verify_en_passant(@previous_move, goal)
   end
 
-  private 
+  private
 
   def verify_en_passant(previous_move, goal)
     return true if previous_move['move'] == 'double_step' && previous_move['color'] != color &&

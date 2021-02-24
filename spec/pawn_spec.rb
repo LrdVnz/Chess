@@ -16,7 +16,7 @@ describe Pawn do
     let(:board) { Board.new.board }
 
     before(:each) do
-     allow_any_instance_of(Pawn).to receive(:save_move)
+      allow_any_instance_of(Pawn).to receive(:save_move)
     end
 
     context 'when given a valid goal' do
@@ -77,63 +77,62 @@ describe Pawn do
     end
   end
 
-  describe "#save_move" do
+  describe '#save_move' do
     subject(:pawn_save) { described_class.new([1, 2], 'black') }
-    
+
     after(:each) do
       File.delete("#{pawn_save.save_move_path}last_pawn_move")
     end
 
-    context "when saving the move" do
-         it "saves and overwrites the file" do
-          double_step = pawn_save.moves['double_step']
-          pawn_save.save_move(double_step)
-          expect(File).to exist("#{pawn_save.save_move_path}last_pawn_move")
-         end
+    context 'when saving the move' do
+      it 'saves and overwrites the file' do
+        double_step = pawn_save.moves['double_step']
+        pawn_save.save_move(double_step)
+        expect(File).to exist("#{pawn_save.save_move_path}last_pawn_move")
+      end
     end
   end
 
-  describe "#load_move" do
+  describe '#load_move' do
     subject(:pawn_load) { described_class.new([1, 2], 'black') }
-    
-    context "when loading a move" do
-      it "loads correctly" do
-        sample_pawn = Pawn.new([6,3], 'white')
+
+    context 'when loading a move' do
+      it 'loads correctly' do
+        sample_pawn = Pawn.new([6, 3], 'white')
         sample_pawn.save_move(sample_pawn.moves['double_step'])
-        pawn_load.load_move([4,3])
+        pawn_load.load_move([4, 3])
         previous_move = pawn_load.instance_variable_get(:@previous_move)
         expect(previous_move['color']).to eq('white')
       end
     end
   end
 
-  describe "#en_passant" do 
+  describe '#en_passant' do
     before do
-      allow_any_instance_of(Board).to receive(:init_pieces)   
+      allow_any_instance_of(Board).to receive(:init_pieces)
     end
 
     subject(:pawn_enpassant) { described_class.new([4, 2], 'black') }
     let(:board) { Board.new.board }
-     
-    context "when doing an en passant" do
+
+    context 'when doing an en passant' do
       before(:each) do
-        sample_pawn = Pawn.new([6,3], 'white')
+        sample_pawn = Pawn.new([6, 3], 'white')
         board[6][3] = sample_pawn
         board[4][2] = pawn_enpassant
-        sample_pawn.save_move(sample_pawn.moves['double_step'])   
+        sample_pawn.save_move(sample_pawn.moves['double_step'])
       end
 
-      it "returns true" do
-        expect(pawn_enpassant.en_passant([5,3], board)).to be(true)
+      it 'returns true' do
+        expect(pawn_enpassant.en_passant([5, 3], board)).to be_instance_of(Hash)
       end
     end
   end
 
   context 'shared_example' do
-
     before(:each) do
       allow_any_instance_of(Pawn).to receive(:save_move)
-     end
+    end
 
     include_examples 'move_piece_shared' do
       let(:current_class) { Pawn.new([1, 5], 'black') }

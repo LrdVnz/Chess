@@ -15,9 +15,6 @@ describe Game do
     subject(:game_start) { described_class.new }
     let(:sample_piece) { Pawn.new([1, 3], 'black') }
 
-    before(:each) do
-    end
-
     context 'when given a valid input' do
       before do
         allow(game_start).to receive(:ask_input).and_return('white')
@@ -227,6 +224,39 @@ describe Game do
       it 'lets the king move away from check' do
         game_nomate.verify_checkmate
         expect(game_nomate.board[1][3]).to be_instance_of(King)
+      end
+    end
+  end
+
+  context "en-passant" do
+    before do    
+    allow_any_instance_of(Board).to receive(:init_pieces)
+    end
+
+    describe "#move_piece" do 
+      subject(:game_enpassant) { described_class.new }
+      let(:pawn_enpassant) { Pawn.new([4,2], 'black')}
+      let(:board) { game_enpassant.board }
+
+      context "when making an en passant move" do
+        before(:each) do
+          allow(game_enpassant).to receive(:ask_input).and_return('black')
+          allow(game_enpassant).to receive(:turn_loop)        
+          sample_pawn = Pawn.new([4, 3], 'white')
+          board[4][3] = sample_pawn
+          board[4][2] = pawn_enpassant
+          sample_pawn.save_move(sample_pawn.moves['double_step'])  
+        end
+        
+        it "moves the piece correctly" do
+          game_enpassant.move_piece(pawn_enpassant, [5,3], game_enpassant.board, game_enpassant.turns )
+          expect(board[5][3]).to be(pawn_enpassant)
+        end
+
+        it "removes the enemy piece" do
+          game_enpassant.move_piece(pawn_enpassant, [5,3], game_enpassant.board, game_enpassant.turns )
+          expect(board[4][3]).to eq(" ")   
+       end
       end
     end
   end
