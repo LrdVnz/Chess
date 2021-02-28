@@ -31,4 +31,22 @@ module Helpers
       result == goal && move_cell.color != color
     end
   end
+  
+  # Pawn helpers
+  def check_diagonal(result, goal, move_cell)
+    if move_cell == ' '
+      result == goal
+    else
+      move_cell.color != color && result == goal
+    end
+  end
+
+  def verify_diagonal(result, goal, key, move_cell)
+    result == goal && key.match(/eat_right|eat_left/) &&
+      move_cell != ' ' && move_cell.color != color
+  end
+
+  def verify_standard(result, goal, key, move_cell)
+    result == goal && key == 'standard' && move_cell == ' '
+  end
 end
