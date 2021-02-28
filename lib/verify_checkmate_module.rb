@@ -3,8 +3,10 @@
 # helper module to store the function for verifying check and checkmate
 module VerifyCheckmate
   def verify_checkmate
-    return @winner = @enemy if verify_king_check == true &&
-                               escape_check == false
+    if verify_king_check == true && escape_check == false
+      puts "#{@enemy.color} WON!"
+      @winner = @enemy
+    end
   end
 
   def escape_check

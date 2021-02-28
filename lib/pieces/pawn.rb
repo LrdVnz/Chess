@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'helpers/pieces_helpers'
-require_relative 'helpers/en_passant_helper.rb'
+require_relative 'helpers/en_passant_helper'
 
 # class for the pawn piece. Holds position, movement, color
 class Pawn

@@ -5,6 +5,7 @@ require './lib/board'
 describe Board do
   before(:each) do
     allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Board).to receive(:puts)
   end
 
   describe '#initialize' do
@@ -90,6 +91,37 @@ describe Board do
         board_get_position.get_position
         board_get_position.get_position
         board_get_position.get_position
+      end
+    end
+  end
+
+  context 'pawn promotion' do
+    before do
+      allow_any_instance_of(Board).to receive(:init_pieces)
+    end
+
+    describe '#promote_pawn' do
+      subject(:board_promote) { described_class.new }
+      let(:pawn_promote) { Pawn.new([0, 1], 'white') }
+
+      context 'when promoting a pawn' do
+        before do
+          pos0 = pawn_promote.position[0]
+          pos1 = pawn_promote.position[1]
+          board_promote.insert_piece(pawn_promote, pos0, pos1)
+        end
+
+        it 'correctly trasforms in a queen' do
+          allow(board_promote).to receive(:gets).and_return('queen')
+          board_promote.promote_pawn(pawn_promote, [0, 1])
+          expect(board_promote.board[0][1]).to be_instance_of(Queen)
+        end
+
+        it 'correctly trasforms in a rook' do
+          allow(board_promote).to receive(:gets).and_return('rook')
+          board_promote.promote_pawn(pawn_promote, [0, 1])
+          expect(board_promote.board[0][1]).to be_instance_of(Rook)
+        end
       end
     end
   end

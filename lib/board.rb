@@ -38,6 +38,8 @@ class Board
   def move_piece(piece, goal, passed_board, turns = 1)
     move_checked = piece.check_move(goal, passed_board, turns)
     if move_checked == true
+      check_castling(piece, goal)
+      check_promote(piece, goal)
       checked_true(piece, goal)
     elsif move_checked == false
       puts 'Invalid move!'
@@ -45,6 +47,57 @@ class Board
     elsif move_checked['name'] == 'en_passant'
       checked_en_passant(piece, move_checked, goal)
     end
+  end
+
+  def check_castling(piece, goal)
+    @rook = nil 
+     if piece.class == 'King' && piece.moves_made == 0
+       if goal[1] == (piece.position[1] + 2)  
+         castling_right(piece,goal)
+       elsif goal[1] == (piece.position[1] - 2)
+         castling_left(piece,goal)
+        end
+     end 
+  end
+
+
+  def castling_right(piece, goal)
+      first_cell = board[goal[0][piece.position[1] + 1]]
+      second_cell = board[goal[0][piece.position[1] + 2]]
+      if first_cell == ' ' && second_cell == ' '
+        
+        @rook = board[goal[0]][7]
+      end
+  end
+
+  def castling_left(piece, goal)
+    first_cell = board[goal[0][piece.position[1] - 1]]
+    second_cell = board[goal[0][piece.position[1] - 2]]
+    if first_cell == ' ' && second_cell == ' '
+       @rook = board[goal[0]][0]
+    end
+  end
+
+  def check_promote(piece, goal)
+    if piece.instance_of?(Pawn) && (piece.color == 'white' && (goal[0]).zero? ||
+         piece.color == 'black' && goal[0] == 7)
+      promote_pawn(piece, goal)
+    end
+  end
+
+  def promote_pawn(piece, goal)
+    puts 'Choose which class to promote your pawn to.'
+    promote_class = nil
+    loop do
+      promote_class = gets.chomp.downcase
+      break if promote_class.match(/(queen|knight|rook|bishop)/)
+
+      print 'Choose a valid class'
+    end
+    new_class = Kernel.const_get(promote_class.capitalize)
+    promoted_pawn = new_class.new(goal, piece.color)
+    reset_cell(goal)
+    insert_piece(promoted_pawn, goal[0], goal[1])
   end
 
   private

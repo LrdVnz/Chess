@@ -31,7 +31,7 @@ module Helpers
       result == goal && move_cell.color != color
     end
   end
-  
+
   # Pawn helpers
   def check_diagonal(result, goal, move_cell)
     if move_cell == ' '

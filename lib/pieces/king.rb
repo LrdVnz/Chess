@@ -6,11 +6,12 @@ require_relative 'helpers/pieces_helpers'
 class King
   include Helpers
   attr_reader :moves, :color
-  attr_accessor :position
+  attr_accessor :position, :moves_made
 
   def initialize(position, color)
     @position = position
     @color = color
+    @moves_made = 0
     movelist
     image
   end
@@ -46,7 +47,10 @@ class King
     moves.each do |move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
-      return is_valid = true if result == goal && (move_cell == ' ' || move_cell.color != color)
+      if result == goal && (move_cell == ' ' || move_cell.color != color)
+        @moves_made += 1
+        return is_valid = true
+      end
     end
     is_valid
   end

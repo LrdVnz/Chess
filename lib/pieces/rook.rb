@@ -13,6 +13,7 @@ class Rook
   def initialize(position, color)
     @position = position
     @color = color
+    @moves_made = 0
     movelist
     image
   end
@@ -46,7 +47,10 @@ class Rook
         new_move = [move[0][i], move[1][i]]
         result = make_move(new_move)
         move_cell = goal_cell(result, board) unless result.nil?
-        return is_valid = check_path_rook(result, board) if verify_condition(result, goal, move_cell)
+        if verify_condition(result, goal, move_cell)
+          @moves_made += 1
+          return is_valid = check_path_rook(result, board)
+        end
       end
     end
     is_valid
