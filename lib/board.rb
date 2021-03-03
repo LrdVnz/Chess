@@ -2,9 +2,11 @@
 
 project_root = File.dirname(File.absolute_path(__FILE__))
 Dir.glob("#{project_root}/pieces/*.rb").sort.each { |file| require file }
+require_relative 'verify_checkmate_module'
 
 # Board class. Holds graphical represantion, functions to handle pieces
 class Board
+  include VerifyCheckmate
   attr_accessor :board, :winner
 
   def initialize
@@ -62,20 +64,61 @@ class Board
 
 
   def castling_right(piece, goal)
-      first_cell = board[goal[0][piece.position[1] + 1]]
-      second_cell = board[goal[0][piece.position[1] + 2]]
-      if first_cell == ' ' && second_cell == ' '
-        
+    row = goal[0]
+    first_column = piece.position[1] + 1
+    second_column = piece.position[1] + 2
+    first_cell = board[row][first_column]
+    second_cell = board[row][second_column]
+    if first_cell == ' ' && second_cell == ' '
+        if castling_check_mate(piece, row,first_column, second_column) == true         
         @rook = board[goal[0]][7]
+        if rook.moves_made.zero? 
+         do_castling_right(piece, goal)
+        end
+        end
       end
   end
 
-  def castling_left(piece, goal)
-    first_cell = board[goal[0][piece.position[1] - 1]]
-    second_cell = board[goal[0][piece.position[1] - 2]]
+  def castling_left(piece,goal)
+    row = goal[0]
+    first_column = piece.position[1] - 1
+    second_column = piece.position[1] - 2
+    first_cell = board[row][first_column]
+    second_cell = board[row][second_column]
     if first_cell == ' ' && second_cell == ' '
-       @rook = board[goal[0]][0]
+      if castling_check_mate(piece, row,first_column, second_column) == true 
+        @rook = board[goal[0]][0]
+        if rook.moves_made.zero? 
+          do_castling_left(piece, goal)
+        end 
+      end
     end
+  end
+
+  def castling_check_mate(piece, row, first_column, second_column) 
+    board[row][first_column] = piece 
+    board[piece.position[0]][piece.position[1]] = ' '
+    return false if verify_king_check == true 
+    board[row][second_column] = piece 
+    board[row][first_column] = ' '
+    return false if verify_king_check == true 
+    board[row][second_column + 1] = piece 
+    board[row][second_column] = ' '
+    return false if verify_king_check == true 
+     
+    true 
+  end
+
+  def do_castling_right(piece, goal)
+      board[goal[0]][goal[1]] = piece
+      board[piece.position[0]][piece.position[1]] = ' '
+      board[goal[0] - 1][goal[1] - 2] = rook
+  end
+
+  def do_castling_left(piece, goal)
+    board[goal[0]][goal[1]] = piece
+    board[piece.position[0]][piece.position[1]] = ' '
+    board[goal[0] + 1][goal[1] + 2] = rook
   end
 
   def check_promote(piece, goal)

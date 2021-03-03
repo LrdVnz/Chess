@@ -107,7 +107,7 @@ describe Board do
       context 'when promoting a pawn' do
         before do
           pos0 = pawn_promote.position[0]
-          pos1 = pawn_promote.position[1]
+          pos1 = pawn_promote.position[1] 
           board_promote.insert_piece(pawn_promote, pos0, pos1)
         end
 
@@ -123,6 +123,26 @@ describe Board do
           expect(board_promote.board[0][1]).to be_instance_of(Rook)
         end
       end
+    end
+  end
+
+  context 'castling' do
+    before do
+      allow_any_instance_of(Board).to receive(:init_pieces)
+    end
+
+    describe '#check_castling' do
+      subject(:board_castling) { described_class.new }
+      let(:king_castling) { King.new([7, 3], 'white') }
+      
+      context 'when doing castling right'
+       let(:rook_castling) { Rook.new([7,6], 'white') }
+
+       it 'moves pieces correctly' do
+          board_castling.check_castling(king_castling, [7,5])
+          expect(board_castling.board[7][5]).to be(king_castling)
+          expect(board_castling.board[7][4]).to be(rook_castling)
+       end
     end
   end
 end
