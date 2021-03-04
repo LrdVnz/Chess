@@ -8,7 +8,7 @@ class Rook
   include RookChecker
   include Helpers
   attr_reader :move, :color
-  attr_accessor :position
+  attr_accessor :position, :moves_made 
 
   def initialize(position, color)
     @position = position

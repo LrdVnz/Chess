@@ -2,11 +2,9 @@
 
 project_root = File.dirname(File.absolute_path(__FILE__))
 Dir.glob("#{project_root}/pieces/*.rb").sort.each { |file| require file }
-require_relative 'verify_checkmate_module'
 
 # Board class. Holds graphical represantion, functions to handle pieces
 class Board
-  include VerifyCheckmate
   attr_accessor :board, :winner
 
   def initialize
@@ -53,7 +51,8 @@ class Board
 
   def check_castling(piece, goal)
     @rook = nil 
-     if piece.class == 'King' && piece.moves_made == 0
+    print piece.class == King
+     if piece.class == King && piece.moves_made == 0
        if goal[1] == (piece.position[1] + 2)  
          castling_right(piece,goal)
        elsif goal[1] == (piece.position[1] - 2)
@@ -71,8 +70,9 @@ class Board
     second_cell = board[row][second_column]
     if first_cell == ' ' && second_cell == ' '
         if castling_check_mate(piece, row,first_column, second_column) == true         
-        @rook = board[goal[0]][7]
-        if rook.moves_made.zero? 
+          showboard
+          @rook = board[goal[0]][7] 
+        if @rook.moves_made.zero? 
          do_castling_right(piece, goal)
         end
         end
@@ -87,8 +87,8 @@ class Board
     second_cell = board[row][second_column]
     if first_cell == ' ' && second_cell == ' '
       if castling_check_mate(piece, row,first_column, second_column) == true 
-        @rook = board[goal[0]][0]
-        if rook.moves_made.zero? 
+        @rook = board[goal[0]][0]        
+        if @rook.moves_made.zero?
           do_castling_left(piece, goal)
         end 
       end
@@ -105,20 +105,21 @@ class Board
     board[row][second_column + 1] = piece 
     board[row][second_column] = ' '
     return false if verify_king_check == true 
-     
+
+    board[row][second_column + 1] = ' '
     true 
   end
 
   def do_castling_right(piece, goal)
-      board[goal[0]][goal[1]] = piece
       board[piece.position[0]][piece.position[1]] = ' '
-      board[goal[0] - 1][goal[1] - 2] = rook
+      board[goal[0]][goal[1]] = piece
+      board[goal[0]][goal[1] - 1] = @rook
   end
 
   def do_castling_left(piece, goal)
-    board[goal[0]][goal[1]] = piece
     board[piece.position[0]][piece.position[1]] = ' '
-    board[goal[0] + 1][goal[1] + 2] = rook
+    board[goal[0]][goal[1]] = piece
+    board[goal[0]][goal[1]  + 1] = rook
   end
 
   def check_promote(piece, goal)

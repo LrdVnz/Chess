@@ -7,7 +7,7 @@ describe Game do
     allow_any_instance_of(Game).to receive(:puts)
     allow_any_instance_of(Player).to receive(:puts)
     allow_any_instance_of(Game).to receive(:ask_load)
-    allow_any_instance_of(Board).to receive(:showboard)
+    #allow_any_instance_of(Board).to receive(:showboard)
     allow_any_instance_of(Game).to receive(:ask_save)
   end
 
@@ -240,8 +240,6 @@ describe Game do
 
       context 'when making an en passant move' do
         before(:each) do
-          allow(game_enpassant).to receive(:ask_input).and_return('black')
-          allow(game_enpassant).to receive(:turn_loop)
           sample_pawn = Pawn.new([4, 3], 'white')
           board[4][3] = sample_pawn
           board[4][2] = pawn_enpassant
@@ -291,6 +289,34 @@ describe Game do
           expect(game_load.p1).to be(p1)
         end
       end
+    end
+  end
+
+  context 'castling' do
+    before do
+      allow_any_instance_of(Board).to receive(:init_pieces)
+    end
+
+    describe '#check_castling' do
+      subject(:game_castling) { described_class.new }
+      let(:king_castling) { King.new([7, 4], 'white') }
+      
+      before do 
+        allow(game_castling).to receive(:ask_input).and_return('white')
+        allow(game_castling).to receive(:turn_loop) 
+        game_castling.start_game
+      end
+
+      context 'when doing castling right'
+       let(:rook_castling) { Rook.new([7,7], 'white') }
+
+       it 'moves pieces correctly' do
+          game_castling.board[7][7] = rook_castling
+          game_castling.check_castling(king_castling, [7,6])
+          print game_castling.board
+          expect(game_castling.board[7][6]).to be(king_castling)
+          expect(game_castling.board[7][5]).to be(rook_castling)
+       end
     end
   end
 end
