@@ -1,78 +1,73 @@
+# frozen_string_literal: true
 
-#helper to store castling code 
-module CastlingHelper 
-  def castling_check_mate(piece, row, first_column, second_column) 
-    board[row][first_column] = piece 
-    board[piece.position[0]][piece.position[1]] = ' '
-    return false if verify_king_check == true 
-    board[row][second_column] = piece 
-    board[row][first_column] = ' '
-    return false if verify_king_check == true 
-    board[row][second_column + 1] = piece 
-    board[row][second_column] = ' '
-    return false if verify_king_check == true 
-
-    board[row][second_column + 1] = ' '
-    true 
-  end
-
-
-
+# helper to store castling code
+module CastlingHelper
   def check_castling(piece, goal)
-    @rook = nil 
-    print piece.class == King
-     if piece.class == King && piece.moves_made == 0
-       if goal[1] == (piece.position[1] + 2)  
-         castling_right(piece,goal)
-       elsif goal[1] == (piece.position[1] - 2)
-         castling_left(piece,goal)
-        end
-     end 
-  end
+    @piece = piece
+    @goal = goal
+    @rook = nil
+    return unless @piece.instance_of?(King) && @piece.moves_made.zero?
 
-
-  def castling_right(piece, goal)
-    row = goal[0]
-    first_column = piece.position[1] + 1
-    second_column = piece.position[1] + 2
-    first_cell = board[row][first_column]
-    second_cell = board[row][second_column]
-    if first_cell == ' ' && second_cell == ' '
-        if castling_check_mate(piece, row,first_column, second_column) == true         
-          showboard
-          @rook = board[goal[0]][7] 
-        if @rook.moves_made.zero? 
-         do_castling_right(piece, goal)
-        end
-        end
-      end
-  end
-
-  def castling_left(piece,goal)
-    row = goal[0]
-    first_column = piece.position[1] - 1
-    second_column = piece.position[1] - 2
-    first_cell = board[row][first_column]
-    second_cell = board[row][second_column]
-    if first_cell == ' ' && second_cell == ' '
-      if castling_check_mate(piece, row,first_column, second_column) == true 
-        @rook = board[goal[0]][0]        
-        if @rook.moves_made.zero?
-          do_castling_left(piece, goal)
-        end 
-      end
+    if @goal[1] == (@piece.position[1] + 2)
+      @rook_move = -1
+      castling_right
+    elsif @goal[1] == (@piece.position[1] - 2)
+      @rook_move = 1
+      castling_left
     end
-  end 
-
-  def do_castling_right(piece, goal)
-      board[piece.position[0]][piece.position[1]] = ' '
-      board[goal[0]][goal[1]] = piece
-      board[goal[0]][goal[1] - 1] = @rook
   end
 
-  def do_castling_left(piece, goal)
-    board[piece.position[0]][piece.position[1]] = ' '
-    board[goal[0]][goal[1]] = piece
-    board[goal[0]][goal[1]  + 1] = rook
+  def castling_right
+    utils = create_utils(@piece.position[1] + 1, @piece.position[1] + 2)
+    return unless castling_check_conditions(utils)
+
+    @rook = board[@goal[0]][7]
+    do_castling if @rook.moves_made.zero?
+  end
+
+  def castling_left
+    utils = create_utils(@piece.position[1] - 2, @piece.position[1] - 1)
+    return unless castling_check_conditions(utils)
+
+    @rook = board[@goal[0]][0]
+    do_castling if @rook.moves_made.zero?
+  end
+
+  def create_utils(first_column, second_column)
+    { 'first_column' => first_column,
+      'second_column' => second_column,
+      'first_cell' => board[@goal[0]][first_column],
+      'second_cell' => board[@goal[0]][second_column] }
+  end
+
+  def castling_check_conditions(utils)
+    utils['first_cell'] == ' ' &&
+      utils['second_cell'] == ' ' &&
+      (castling_check_mate(@goal[0], utils['first_column'], utils['second_column']) == true)
+  end
+
+  def do_castling
+    board[@piece.position[0]][@piece.position[1]] = ' '
+    board[@goal[0]][@goal[1]] = @piece
+    board[@goal[0]][@goal[1] + @rook_move] = @rook
+  end
+
+  def castling_check_mate(row, first_column, second_column)
+    return false if verify_first_cell(row, first_column) == false
+    return false if verify_second_cell(row, second_column, first_column) == false
+
+    true
+  end
+
+  def verify_first_cell(row, first_column)
+    board[row][first_column] = @piece
+    board[@piece.position[0]][@piece.position[1]] = ' '
+    return false if verify_king_check == true
+  end
+
+  def verify_second_cell(row, second_column, first_column)
+    board[row][second_column] = @piece
+    board[row][first_column] = ' '
+    return false if verify_king_check == true
   end
 end

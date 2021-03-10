@@ -7,7 +7,7 @@ describe Game do
     allow_any_instance_of(Game).to receive(:puts)
     allow_any_instance_of(Player).to receive(:puts)
     allow_any_instance_of(Game).to receive(:ask_load)
-    #allow_any_instance_of(Board).to receive(:showboard)
+    allow_any_instance_of(Board).to receive(:showboard)
     allow_any_instance_of(Game).to receive(:ask_save)
   end
 
@@ -312,8 +312,8 @@ describe Game do
 
        it 'moves pieces correctly' do
           game_castling.board[7][7] = rook_castling
+          #game_castling.showboard
           game_castling.check_castling(king_castling, [7,6])
-          print game_castling.board
           expect(game_castling.board[7][6]).to be(king_castling)
           expect(game_castling.board[7][5]).to be(rook_castling)
        end

@@ -4,16 +4,20 @@
 module EnPassant
   def en_passant(goal, board)
     load_move(goal)
-    is_valid = false
+    @is_valid = false
     less_moves = @moves.reject { |k, _v| %w[double_step standard].include?(k) }
+    verify_less_moves(less_moves, board, goal)
+    @is_valid
+  end
+
+  def verify_less_moves(less_moves, board, goal)
     less_moves.each do |_key, move|
       result = make_move(move)
       move_cell = board[result[0]][result[1]] unless result.nil?
       if check_diagonal(result, goal, move_cell)
-        is_valid = { 'name' => 'en_passant', 'enemy_pos' => @previous_move['position'] }
+        @is_valid = { 'name' => 'en_passant', 'enemy_pos' => @previous_move['position'] }
       end
     end
-    is_valid
   end
 
   def save_move(move)

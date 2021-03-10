@@ -3,7 +3,7 @@
 project_root = File.dirname(File.absolute_path(__FILE__))
 Dir.glob("#{project_root}/pieces/*.rb").sort.each { |file| require file }
 require_relative 'pieces/helpers/castling_helper'
-require_relative 'pieces/helpers/verify_checkmate_module.rb'
+require_relative 'pieces/helpers/verify_checkmate_module'
 
 # Board class. Holds graphical represantion, functions to handle pieces
 class Board
@@ -42,15 +42,19 @@ class Board
   def move_piece(piece, goal, passed_board, turns = 1)
     move_checked = piece.check_move(goal, passed_board, turns)
     if move_checked == true
-      check_castling(piece, goal)
-      check_promote(piece, goal)
-      checked_true(piece, goal)
+      check_all_moves(piece, goal)
     elsif move_checked == false
       puts 'Invalid move!'
       false
     elsif move_checked['name'] == 'en_passant'
       checked_en_passant(piece, move_checked, goal)
     end
+  end
+
+  def check_all_moves(piece, goal)
+    check_castling(piece, goal)
+    check_promote(piece, goal)
+    checked_true(piece, goal)
   end
 
   def check_promote(piece, goal)
@@ -69,13 +73,17 @@ class Board
 
       print 'Choose a valid class'
     end
+    transform_pawn(piece, goal, promote_class)
+  end
+
+  private
+
+  def transform_pawn(piece, goal, promote_class)
     new_class = Kernel.const_get(promote_class.capitalize)
     promoted_pawn = new_class.new(goal, piece.color)
     reset_cell(goal)
     insert_piece(promoted_pawn, goal[0], goal[1])
   end
-
-  private
 
   def checked_true(piece, goal)
     reset_cell(piece.position)

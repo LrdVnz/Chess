@@ -3,26 +3,30 @@
 # helper module to store the function for verifying check and checkmate
 module VerifyCheckmate
   def verify_checkmate
-    if verify_king_check == true && escape_check == false
-      puts "#{@enemy.color} WON!"
-      @winner = @enemy
-    end
+    return unless verify_king_check == true && escape_check == false
+
+    puts "#{@enemy.color} WON!"
+    @winner = @enemy
   end
 
   def escape_check
     puts 'You are in check! Move your king.'
-    piece = nil
+    @piece = nil
+    pick_king
+    return false if checkmate?(@piece) == true
+
+    move_king(@piece)
+  end
+
+  def pick_king
     board.each  do |row|
       row.each  do |cell|
         next if cell == ' '
 
-        piece = cell if cell.instance_of?(King) &&
-                        cell.color == @current_player.color
+        @piece = cell if cell.instance_of?(King) &&
+                         cell.color == @current_player.color
       end
     end
-    return false if checkmate?(piece) == true
-
-    move_king(piece)
   end
 
   def move_king(piece)
