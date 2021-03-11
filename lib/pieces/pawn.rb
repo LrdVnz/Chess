@@ -51,18 +51,24 @@ class Pawn
   end
 
   def multiple_moves(goal, board)
-    is_valid = false
+    @goal = goal
+    @board = board
+    @is_valid = false
     moves.each_value do |move|
-      result = make_move(move)
-      next if result.nil?
+      @result = make_move(move)
+      next if @result.nil?
 
-      move_cell = board[result[0]][result[1]]
-      if check_diagonal(result, goal, move_cell) != false
-        save_move(move)
-        return is_valid = true
-      end
+      move_cell = @board[@result[0]][@result[1]]
+      check_save_move(move, move_cell)
     end
-    is_valid
+    @is_valid
+  end
+
+  def check_save_move(move, move_cell)
+    return unless check_diagonal(@result, @goal, move_cell) != false
+
+    save_move(move)
+    @is_valid = true
   end
 
   def move_forward_check(goal, board)

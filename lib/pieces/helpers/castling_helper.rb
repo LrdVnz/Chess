@@ -8,6 +8,10 @@ module CastlingHelper
     @rook = nil
     return unless @piece.instance_of?(King) && @piece.moves_made.zero?
 
+    castling_side
+  end
+
+  def castling_side
     if @goal[1] == (@piece.position[1] + 2)
       @rook_move = -1
       castling_right
@@ -47,8 +51,20 @@ module CastlingHelper
   end
 
   def do_castling
+    reset_king_cell
+    put_king
+    put_rook
+  end
+
+  def reset_king_cell
     board[@piece.position[0]][@piece.position[1]] = ' '
+  end
+
+  def put_king
     board[@goal[0]][@goal[1]] = @piece
+  end
+
+  def put_rook
     board[@goal[0]][@goal[1] + @rook_move] = @rook
   end
 

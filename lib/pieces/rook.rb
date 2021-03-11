@@ -41,19 +41,29 @@ class Rook
   end
 
   def check_move(goal, board, _turns = 1)
-    is_valid = false
+    @goal = goal
+    @board = board
+    @is_valid = false
     @moves.each do |move|
-      0.upto(7) do |i|
-        new_move = [move[0][i], move[1][i]]
-        result = make_move(new_move)
-        move_cell = goal_cell(result, board) unless result.nil?
-        if verify_condition(result, goal, move_cell)
-          @moves_made += 1
-          return is_valid = check_path_rook(result, board)
-        end
+      0.upto(7) do |num|
+        control_move(move, num)
       end
     end
-    is_valid
+    @is_valid
+  end
+
+  def control_move(move, num)
+    new_move = [move[0][num], move[1][num]]
+    result = make_move(new_move)
+    move_cell = goal_cell(result, @board) unless result.nil?
+    move_valid?(result, move_cell)
+  end
+
+  def move_valid?(result, move_cell)
+    return unless verify_condition(result, @goal, move_cell)
+
+    @moves_made += 1
+    @is_valid = check_path_rook(result, @board)
   end
 
   def possible_moves(board)
