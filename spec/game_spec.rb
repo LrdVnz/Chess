@@ -230,9 +230,48 @@ describe Game do
 
 
   describe "#verify_stalemate" do
-    context
+    before(:each) do
+      allow_any_instance_of(Board).to receive(:init_pieces)
+      allow_any_instance_of(Game).to receive(:ask_input).and_return('black')
+      allow_any_instance_of(Game).to receive(:turn_loop)
+      allow_any_instance_of(Player).to receive(:text_select_piece)
+    end
+
+
+    context 'when king is in stalemate' do
+      let(:game_stalemate) { described_class.new }
+
+      before do
+        game_stalemate.start_game
+        game_stalemate.board[1][2] = Queen.new([1, 2], 'white')
+        game_stalemate.board[0][0] = King.new([0, 0], 'black')
+      end
+
+      it 'ends the game' do
+        game_stalemate.verify_stalemate
+        expect(game_stalemate.won).to be(true)
+      end
+    end
+
+    context 'when king is in stalemate by two pieces ' do
+      let(:game_stalemate_two) { described_class.new }
+
+      before do
+        game_stalemate_two.start_game
+        game_stalemate_two.board[2][6] = Rook.new([2, 6], 'white')
+        game_stalemate_two.board[0][7] = King.new([0, 7], 'black')
+        game_stalemate_two.board[2][7] = King.new([2, 7], 'white')        
+      end
+
+      it 'ends the game' do
+        game_stalemate_two.verify_stalemate
+        expect(game_stalemate_two.won).to be(true)
+      end
+    end
 
   end
+
+  
   context 'en-passant' do
     before do
       allow_any_instance_of(Board).to receive(:init_pieces)

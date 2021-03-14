@@ -64,4 +64,3 @@ class King
     all_results
   end
 end
-
