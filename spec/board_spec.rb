@@ -81,7 +81,7 @@ describe Board do
       end
     end
 
-    context 'when given wron values two times, then correct ones' do
+    context 'when given wrong values two times, then correct ones' do
       it 'returns error message twice, then values in array' do
         error_message = 'Input error! Choose a row and a column, from 0 to 7'
         allow(board_get_position).to receive(:gets).with(34, 2)

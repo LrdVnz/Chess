@@ -228,6 +228,11 @@ describe Game do
     end
   end
 
+
+  describe "#verify_stalemate" do
+    context
+
+  end
   context 'en-passant' do
     before do
       allow_any_instance_of(Board).to receive(:init_pieces)
