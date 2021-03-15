@@ -13,9 +13,9 @@ module EnPassant
   def verify_less_moves(less_moves, board, goal)
     less_moves.each do |_key, move|
       result = make_move(move)
-      next if result.nil? 
-      
-      move_cell = board[result[0]][result[1]] 
+      next if result.nil?
+
+      move_cell = board[result[0]][result[1]]
       if check_diagonal(result, goal, move_cell)
         @is_valid = { 'name' => 'en_passant', 'enemy_pos' => @previous_move['position'] }
       end
@@ -46,7 +46,9 @@ module EnPassant
   end
 
   def verify_move(previous_move)
-    previous_move['move'] == [-2, 0] || previous_move['move'] == [2, 0]
+    #print "da prev move \n"
+    #p previous_move 
+    previous_move['move'] == [-2, 0] || previous_move['move'] == [+2, 0]
   end
 
   def verify_previous_pos(previous_move)

@@ -279,10 +279,10 @@ describe Game do
 
     describe '#move_piece' do
       subject(:game_enpassant) { described_class.new }
-      let(:pawn_enpassant) { Pawn.new([4, 2], 'black') }
       let(:board) { game_enpassant.board }
 
       context 'when making an en passant move' do
+        let(:pawn_enpassant) { Pawn.new([4, 2], 'black') }
         before(:each) do
           sample_pawn = Pawn.new([4, 3], 'white')
           board[4][3] = sample_pawn
@@ -297,6 +297,26 @@ describe Game do
 
         it 'removes the enemy piece' do
           game_enpassant.move_piece(pawn_enpassant, [5, 3], game_enpassant.board, game_enpassant.turns)
+          expect(board[4][3]).to eq(' ')
+        end
+      end
+
+      context 'when making an en passant move with white' do
+        let(:pawn_enpassant) { Pawn.new([4, 2], 'white') }
+        before(:each) do
+          sample_pawn = Pawn.new([4, 3], 'black')
+          board[4][3] = sample_pawn
+          board[4][2] = pawn_enpassant
+          sample_pawn.save_move(sample_pawn.moves['double_step'])
+        end
+
+        it 'moves the piece correctly' do
+          game_enpassant.move_piece(pawn_enpassant, [3, 3], game_enpassant.board, game_enpassant.turns)
+          expect(board[3][3]).to be(pawn_enpassant)
+        end
+
+        it 'removes the enemy piece' do
+          game_enpassant.move_piece(pawn_enpassant, [3, 3], game_enpassant.board, game_enpassant.turns)
           expect(board[4][3]).to eq(' ')
         end
       end

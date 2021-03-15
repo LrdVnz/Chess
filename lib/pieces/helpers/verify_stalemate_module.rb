@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# module to hold stalemate verification.
 module VerifyStalemate
   def verify_stalemate
     pick_pieces
@@ -42,19 +43,26 @@ module VerifyStalemate
   def verify_king_stalemate
     initial_pos = @curr_king.position
     king_poss_moves = @curr_king.possible_moves(board)
-    moves_legal = false
+    @moves_legal = false
     king_poss_moves.each do |move|
-      move_piece(@curr_king, move, board)
-      if verify_king_check == true
-        moves_legal = true
-        break
-      end
+      break if verify_move_loop(move) == false
 
-      board[initial_pos[0]][initial_pos[1]] = @curr_king
-      @curr_king.position = initial_pos
+      king_reset(initial_pos)
     end
+    king_reset(initial_pos)
+    @moves_legal
+  end
+
+  def verify_move_loop(move)
+    move_piece(@curr_king, move, board)
+    return unless verify_king_check == true
+
+    @moves_legal = true
+    false
+  end
+
+  def king_reset(initial_pos)
     board[initial_pos[0]][initial_pos[1]] = @curr_king
     @curr_king.position = initial_pos
-    moves_legal
   end
 end

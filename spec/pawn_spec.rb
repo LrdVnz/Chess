@@ -17,6 +17,7 @@ describe Pawn do
 
     before(:each) do
       allow_any_instance_of(Pawn).to receive(:save_move)
+      File.delete("#{pawn_check.save_move_path}last_pawn_move")
     end
 
     context 'when given a valid goal' do
