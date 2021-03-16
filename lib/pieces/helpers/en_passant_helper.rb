@@ -46,8 +46,6 @@ module EnPassant
   end
 
   def verify_move(previous_move)
-    #print "da prev move \n"
-    #p previous_move 
     previous_move['move'] == [-2, 0] || previous_move['move'] == [+2, 0]
   end
 

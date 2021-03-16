@@ -3,16 +3,15 @@
 require './lib/board'
 
 describe Board do
-  before(:each) do
-    allow_any_instance_of(Board).to receive(:showboard)
-    allow_any_instance_of(Board).to receive(:puts)
-  end
-
   describe '#initialize' do
     subject(:board_new) { described_class.new }
 
+    before do
+      allow(board_new).to receive(:puts)
+    end
+
     context 'when creating the board' do
-      it 'should create 8 x 8 board' do
+      it 'creates 8 x 8 board' do
         board = board_new.board
         expect(board).to be_instance_of(Array)
         expect(board.length).to eq(8)
@@ -24,13 +23,14 @@ describe Board do
   describe '#set_piece' do
     subject(:board_set_piece) { described_class.new }
 
-    before(:each) do
-      allow_any_instance_of(Board).to receive(:init_pieces)
+    before do
+      allow(board_set_piece).to receive(:puts)
+      allow(board_set_piece).to receive(:init_pieces)
     end
 
     context 'when chosen piece is Knight' do
       it 'creates a new knight and calls put_piece' do
-        allow_any_instance_of(Board).to receive(:init_pieces)
+        allow_any_instance_of(described_class).to receive(:init_pieces)
         expect(Knight).to receive(:new).with([0, 1], 'white')
         expect(board_set_piece).to receive(:insert_piece)
         board_set_piece.create_piece(Knight, [0, 1], 'white')
@@ -40,10 +40,12 @@ describe Board do
 
   describe '#put_piece' do
     subject(:board_put_piece) { described_class.new }
+
     let(:knight) { Knight.new([0, 1], 'black') }
 
-    before(:each) do
-      allow_any_instance_of(Board).to receive(:init_pieces)
+    before do
+      allow(board_put_piece).to receive(:puts)
+      allow(board_put_piece).to receive(:init_pieces)
     end
 
     context 'when giving a knight' do
@@ -58,8 +60,9 @@ describe Board do
   describe '#get_position' do
     subject(:board_get_position) { described_class.new }
 
-    before(:each) do
-      allow_any_instance_of(Board).to receive(:init_pieces)
+    before do
+      allow(board_get_position).to receive(:puts)
+      allow(board_get_position).to receive(:init_pieces)
     end
 
     context 'when given correct values' do
@@ -96,18 +99,20 @@ describe Board do
   end
 
   context 'pawn promotion' do
-    before do
-      allow_any_instance_of(Board).to receive(:init_pieces)
-    end
-
     describe '#promote_pawn' do
       subject(:board_promote) { described_class.new }
+
       let(:pawn_promote) { Pawn.new([0, 1], 'white') }
+
+      before do
+        allow(board_promote).to receive(:puts)
+        allow(board_promote).to receive(:init_pieces)
+      end
 
       context 'when promoting a pawn' do
         before do
           pos0 = pawn_promote.position[0]
-          pos1 = pawn_promote.position[1] 
+          pos1 = pawn_promote.position[1]
           board_promote.insert_piece(pawn_promote, pos0, pos1)
         end
 
@@ -125,5 +130,4 @@ describe Board do
       end
     end
   end
- 
 end

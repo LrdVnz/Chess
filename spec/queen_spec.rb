@@ -5,12 +5,13 @@ require './lib/board'
 require_relative 'shared_examples'
 
 describe Queen do
-  before(:each) do
+  before do
     allow_any_instance_of(Board).to receive(:showboard)
   end
 
   describe '#check_move' do
     subject(:queen_check) { described_class.new([0, 4], 'white') }
+
     let(:board) { Board.new.board }
 
     context 'when given a valid goal' do
@@ -38,7 +39,7 @@ describe Queen do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Queen.new([0, 3], 'black') }
+      let(:current_class) { described_class.new([0, 3], 'black') }
       let(:valid_goal) { [1, 2] }
       let(:invalid_goal) { %w[aaa eeeffff] }
     end
@@ -46,7 +47,7 @@ describe Queen do
 
   context 'shared_example second' do
     include_examples 'move_piece_occupied_path' do
-      let(:current_class) { Queen.new([2, 1], 'black') }
+      let(:current_class) { described_class.new([2, 1], 'black') }
       let(:valid_goal) { [2, 4] }
       let(:invalid_goal) { [4, 3] }
     end

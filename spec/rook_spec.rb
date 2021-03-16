@@ -5,12 +5,13 @@ require './lib/board'
 require_relative 'shared_examples'
 
 describe Rook do
-  before(:each) do
+  before do
     allow_any_instance_of(Board).to receive(:showboard)
   end
 
   describe '#check_move' do
     subject(:tower_check) { described_class.new([0, 0], 'white') }
+
     let(:board) { Board.new.board }
 
     context 'when given a valid goal' do
@@ -35,7 +36,7 @@ describe Rook do
 
   context 'shared_example first' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Rook.new([0, 0], 'black') }
+      let(:current_class) { described_class.new([0, 0], 'black') }
       let(:valid_goal) { [1, 0] }
       let(:invalid_goal) { ['dqwwwq', 20_200_202] }
     end
@@ -43,7 +44,7 @@ describe Rook do
 
   context 'shared example second' do
     include_examples 'move_piece_occupied_path' do
-      let(:current_class) { Rook.new([0, 7], 'black') }
+      let(:current_class) { described_class.new([0, 7], 'black') }
       let(:valid_goal) { [1, 7] }
       let(:invalid_goal) { [7, 2] }
     end

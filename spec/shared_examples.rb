@@ -4,7 +4,7 @@ require './lib/game'
 Dir['./lib/pieces/*.rb'].sort.each { |file| require file }
 # include bishop in second example ----> occupied path
 RSpec.shared_examples 'move_piece_shared' do
-  before(:each) do
+  before do
     allow_any_instance_of(Player).to receive(:puts)
     allow_any_instance_of(Board).to receive(:showboard)
     allow_any_instance_of(Game).to receive(:ask_load)
@@ -75,7 +75,7 @@ RSpec.shared_examples 'move_piece_occupied_path' do
   let(:pawn) { Pawn.new([valid_goal[0], valid_goal[1]], 'black') }
   let(:board) { game_second_shared.board }
 
-  before(:each) do
+  before do
     allow_any_instance_of(Player).to receive(:puts)
     allow_any_instance_of(Board).to receive(:showboard)
     allow_any_instance_of(Game).to receive(:ask_load)

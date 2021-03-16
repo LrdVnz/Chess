@@ -5,12 +5,13 @@ require './lib/board'
 require_relative 'shared_examples'
 
 describe Knight do
-  before(:each) do
+  before do
     allow_any_instance_of(Board).to receive(:showboard)
   end
 
   describe '#check_move' do
     subject(:knight_check) { described_class.new([0, 6], 'white') }
+
     let(:board) { Board.new.board }
 
     context 'when the player inputs valid goal' do
@@ -26,7 +27,7 @@ describe Knight do
 
   context 'shared_example' do
     include_examples 'move_piece_shared' do
-      let(:current_class) { Knight.new([0, 1], 'black') }
+      let(:current_class) { described_class.new([0, 1], 'black') }
       let(:valid_goal) { [2, 2] }
       let(:invalid_goal) { [899, 1213] }
     end

@@ -4,7 +4,7 @@ require './lib/player'
 require './lib/pieces/pawn'
 
 describe Player do
-  before(:each) do
+  before do
     allow_any_instance_of(Board).to receive(:showboard)
   end
 

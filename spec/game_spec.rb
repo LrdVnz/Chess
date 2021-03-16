@@ -3,16 +3,17 @@
 require './lib/game'
 # gotta modify all calls to "move_piece" to add the argument "turns"...
 describe Game do
-  before(:each) do
-    allow_any_instance_of(Game).to receive(:puts)
+  before do
+    allow_any_instance_of(described_class).to receive(:puts)
     allow_any_instance_of(Player).to receive(:puts)
-    allow_any_instance_of(Game).to receive(:ask_load)
+    allow_any_instance_of(described_class).to receive(:ask_load)
     allow_any_instance_of(Board).to receive(:showboard)
-    allow_any_instance_of(Game).to receive(:ask_save)
+    allow_any_instance_of(described_class).to receive(:ask_save)
   end
 
   describe '#start_game' do
     subject(:game_start) { described_class.new }
+
     let(:sample_piece) { Pawn.new([1, 3], 'black') }
 
     context 'when given a valid input' do
@@ -60,6 +61,7 @@ describe Game do
 
   describe '#turn_loop' do
     subject(:game_turn) { described_class.new }
+
     let(:turns_start) { game_turn.turns }
     let(:p1) { Player.new('white') }
     let(:p2) { Player.new('black') }
@@ -106,6 +108,7 @@ describe Game do
 
   describe '#get_enemy_pieces' do
     subject(:game_get_enemy) { described_class.new }
+
     let(:turns_start) { game_turn.turns }
 
     context "when the enemy is of 'black' color" do
@@ -186,10 +189,10 @@ describe Game do
   end
 
   describe '#verify_checkmate' do
-    before(:each) do
+    before do
       allow_any_instance_of(Board).to receive(:init_pieces)
-      allow_any_instance_of(Game).to receive(:ask_input).and_return('black')
-      allow_any_instance_of(Game).to receive(:turn_loop)
+      allow_any_instance_of(described_class).to receive(:ask_input).and_return('black')
+      allow_any_instance_of(described_class).to receive(:turn_loop)
       allow_any_instance_of(Player).to receive(:text_select_piece)
     end
 
@@ -228,15 +231,13 @@ describe Game do
     end
   end
 
-
-  describe "#verify_stalemate" do
-    before(:each) do
+  describe '#verify_stalemate' do
+    before do
       allow_any_instance_of(Board).to receive(:init_pieces)
-      allow_any_instance_of(Game).to receive(:ask_input).and_return('black')
-      allow_any_instance_of(Game).to receive(:turn_loop)
+      allow_any_instance_of(described_class).to receive(:ask_input).and_return('black')
+      allow_any_instance_of(described_class).to receive(:turn_loop)
       allow_any_instance_of(Player).to receive(:text_select_piece)
     end
-
 
     context 'when king is in stalemate' do
       let(:game_stalemate) { described_class.new }
@@ -260,7 +261,7 @@ describe Game do
         game_stalemate_two.start_game
         game_stalemate_two.board[2][6] = Rook.new([2, 6], 'white')
         game_stalemate_two.board[0][7] = King.new([0, 7], 'black')
-        game_stalemate_two.board[2][7] = King.new([2, 7], 'white')        
+        game_stalemate_two.board[2][7] = King.new([2, 7], 'white')
       end
 
       it 'ends the game' do
@@ -268,10 +269,8 @@ describe Game do
         expect(game_stalemate_two.won).to be(true)
       end
     end
-
   end
 
-  
   context 'en-passant' do
     before do
       allow_any_instance_of(Board).to receive(:init_pieces)
@@ -279,11 +278,13 @@ describe Game do
 
     describe '#move_piece' do
       subject(:game_enpassant) { described_class.new }
+
       let(:board) { game_enpassant.board }
 
       context 'when making an en passant move' do
         let(:pawn_enpassant) { Pawn.new([4, 2], 'black') }
-        before(:each) do
+
+        before do
           sample_pawn = Pawn.new([4, 3], 'white')
           board[4][3] = sample_pawn
           board[4][2] = pawn_enpassant
@@ -303,7 +304,8 @@ describe Game do
 
       context 'when making an en passant move with white' do
         let(:pawn_enpassant) { Pawn.new([4, 2], 'white') }
-        before(:each) do
+
+        before do
           sample_pawn = Pawn.new([4, 3], 'black')
           board[4][3] = sample_pawn
           board[4][2] = pawn_enpassant
@@ -327,7 +329,7 @@ describe Game do
     describe '#save' do
       subject(:game_save) { described_class.new }
 
-      after(:each) do
+      after do
         File.delete("#{game_save.saves_path}save2")
       end
 
@@ -363,24 +365,25 @@ describe Game do
 
     describe '#check_castling' do
       subject(:game_castling) { described_class.new }
+
       let(:king_castling) { King.new([7, 4], 'white') }
-      
-      before do 
+      let(:rook_castling) { Rook.new([7, 7], 'white') }
+
+      before do
         allow(game_castling).to receive(:ask_input).and_return('white')
-        allow(game_castling).to receive(:turn_loop) 
+        allow(game_castling).to receive(:turn_loop)
         game_castling.start_game
       end
 
       context 'when doing castling right'
-       let(:rook_castling) { Rook.new([7,7], 'white') }
 
-       it 'moves pieces correctly' do
-          game_castling.board[7][7] = rook_castling
-          #game_castling.showboard
-          game_castling.check_castling(king_castling, [7,6])
-          expect(game_castling.board[7][6]).to be(king_castling)
-          expect(game_castling.board[7][5]).to be(rook_castling)
-       end
+      it 'moves pieces correctly' do
+        game_castling.board[7][7] = rook_castling
+        # game_castling.showboard
+        game_castling.check_castling(king_castling, [7, 6])
+        expect(game_castling.board[7][6]).to be(king_castling)
+        expect(game_castling.board[7][5]).to be(rook_castling)
+      end
     end
   end
 end
