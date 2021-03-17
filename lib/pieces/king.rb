@@ -55,11 +55,15 @@ class King
     is_valid
   end
 
-  def possible_moves(_board)
+  def possible_moves(board)
     all_results = []
     moves.each do |move|
       result = make_move(move)
-      all_results << result unless result.nil?
+      next if result.nil? 
+
+      next if board[result[0]][result[1]] != ' ' && board[result[0]][result[1]].color == color 
+      
+      all_results << result 
     end
     all_results
   end

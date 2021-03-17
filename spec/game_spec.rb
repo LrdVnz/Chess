@@ -191,25 +191,46 @@ describe Game do
   describe '#verify_checkmate' do
     before do
       allow_any_instance_of(Board).to receive(:init_pieces)
-      allow_any_instance_of(described_class).to receive(:ask_input).and_return('black')
       allow_any_instance_of(described_class).to receive(:turn_loop)
       allow_any_instance_of(Player).to receive(:text_select_piece)
     end
 
-    context 'when king is in checkmate' do
-      let(:game_checkmate) { described_class.new }
+    context 'when black king is in checkmate' do
+      let(:game_checkmate_white) { described_class.new }
 
       before do
-        game_checkmate.start_game
-        game_checkmate.board[0][2] = Rook.new([0, 2], 'white')
-        game_checkmate.board[3][2] = Bishop.new([3, 2], 'white')
-        game_checkmate.board[3][5] = Queen.new([3, 5], 'white')
-        game_checkmate.board[1][4] = King.new([1, 4], 'black')
+        allow(game_checkmate_white).to receive(:ask_input).and_return('black')
+        game_checkmate_white.start_game
+        game_checkmate_white.board[0][2] = Rook.new([0, 2], 'white')
+        game_checkmate_white.board[3][2] = Bishop.new([3, 2], 'white')
+        game_checkmate_white.board[3][5] = Queen.new([3, 5], 'white')
+        game_checkmate_white.board[1][4] = King.new([1, 4], 'black')
       end
 
       it 'makes enemy the winner' do
-        game_checkmate.verify_checkmate
-        expect(game_checkmate.winner).to eq(game_checkmate.enemy)
+        game_checkmate_white.verify_checkmate
+        expect(game_checkmate_white.winner).to eq(game_checkmate_white.enemy)
+      end
+    end
+
+
+    context 'when white king is in checkmate' do
+      let(:game_checkmate_black) { described_class.new }
+
+      before do
+        allow(game_checkmate_black).to receive(:ask_input).and_return('white')
+        game_checkmate_black.start_game
+        game_checkmate_black.board[3][0] = Queen.new([3, 0], 'black')
+        game_checkmate_black.board[7][5] = Bishop.new([7, 5], 'white')
+        game_checkmate_black.board[7][3] = Queen.new([7, 3], 'white')
+        game_checkmate_black.board[7][4] = King.new([7, 4], 'white')
+        game_checkmate_black.board[6][4] = Pawn.new([6, 4], 'white')
+        game_checkmate_black.board[6][5] = Pawn.new([6, 5], 'white')
+      end
+
+      it 'makes enemy the winner' do
+        game_checkmate_black.verify_checkmate
+        expect(game_checkmate_black.winner).to be(game_checkmate_black.enemy)
       end
     end
 
@@ -217,6 +238,7 @@ describe Game do
       let(:game_nomate) { described_class.new }
 
       before do
+        allow(game_nomate).to receive(:ask_input).and_return('black')
         game_nomate.start_game
         game_nomate.board[1][2] = King.new([1, 2], 'black')
         game_nomate.board[2][1] = Queen.new([2, 1], 'white')

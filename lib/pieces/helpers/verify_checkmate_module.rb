@@ -4,7 +4,7 @@
 module VerifyCheckmate
   def verify_checkmate
     return unless verify_king_check == true && escape_check == false
-
+     
     puts "#{@enemy.color} WON!"
     @winner = @enemy
   end
@@ -14,7 +14,6 @@ module VerifyCheckmate
     @piece = nil
     pick_king
     return false if checkmate?(@piece) == true
-
     move_king(@piece)
   end
 
@@ -37,7 +36,7 @@ module VerifyCheckmate
 
   def checkmate?(king)
     king_moves = king.possible_moves(board)
-    return true if (king_moves & @all_enemy_moves.flatten(1)).length == king_moves.length
+    return true if (king_moves - @all_enemy_moves.flatten(1)).empty? 
 
     false
   end
