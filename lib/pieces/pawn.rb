@@ -32,11 +32,9 @@ class Pawn
   end
 
   def check_move(goal, board, _turns = 1)
-    print "OPPPPP \n"
     if load_move(goal) == true
       en_passant(goal, board)
     elsif conditions_check_move
-
       multiple_moves(goal, board)
     else
       move_forward_check(goal, board)

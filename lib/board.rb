@@ -40,7 +40,6 @@ class Board
   end
 
   def move_piece(piece, goal, passed_board, turns = 1)
-    move_checked = nil
     if piece.instance_of?(King) && check_castling(piece, goal) == true
       check_castling(piece, goal)
     else

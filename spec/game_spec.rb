@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require './lib/game'
-# gotta modify all calls to "move_piece" to add the argument "turns"...
 describe Game do
   before do
     allow_any_instance_of(described_class).to receive(:puts)
@@ -13,8 +12,11 @@ describe Game do
 
   describe '#start_game' do
     subject(:game_start) { described_class.new }
-
     let(:sample_piece) { Pawn.new([1, 3], 'black') }
+
+    before do 
+     allow(game_start).to receive(:puts)
+    end
 
     context 'when given a valid input' do
       before do
@@ -213,7 +215,6 @@ describe Game do
       end
     end
 
-
     context 'when white king is in checkmate' do
       let(:game_checkmate_black) { described_class.new }
 
@@ -292,71 +293,43 @@ describe Game do
       end
     end
   end
-
+  
   context 'en-passant' do
     describe '#move_piece' do
       context 'when making an en passant move with black' do
         subject(:game_enpassant_black) { described_class.new }
+
         let(:board) { game_enpassant_black.board }
-    
-        let(:pawn_enpassant_black) { Pawn.new([4, 2], 'black') }
+
+        let(:pawn_enpassant_black) { Pawn.new([4, 6], 'black') }
 
         before do
           allow(game_enpassant_black).to receive(:ask_load)
           allow(game_enpassant_black).to receive(:ask_input).and_return('black')
           allow(game_enpassant_black).to receive(:turn_loop)
           game_enpassant_black.start_game
-          sample_pawn = Pawn.new([4, 3], 'white')
-          board[4][3] = sample_pawn
-          board[4][2] = pawn_enpassant_black
-          sample_pawn.save_move(sample_pawn.moves['double_step'], [4,3])
+          sample_pawn = Pawn.new([6, 5], 'white')
+          board[6][5] = sample_pawn
+          board[4][6] = pawn_enpassant_black
+          game_enpassant_black.move_piece(sample_pawn, [4, 5], board)
         end
 
         it 'moves the piece correctly' do
-          game_enpassant_black.move_piece(pawn_enpassant_black, [5, 3], game_enpassant_black.board, game_enpassant_black.turns)
-          expect(board[5][3]).to be(pawn_enpassant_black)
+          game_enpassant_black.move_piece(pawn_enpassant_black, [5, 5], game_enpassant_black.board,
+                                          game_enpassant_black.turns)
+          expect(board[5][5]).to be(pawn_enpassant_black)
         end
 
         it 'removes the enemy piece' do
-          game_enpassant_black.move_piece(pawn_enpassant_black, [5, 3], game_enpassant_black.board, game_enpassant_black.turns)
-          expect(board[4][3]).to eq(' ')
-        end
-      end
-
-      context 'when making an en passant move with white' do
-        subject(:game_enpassant_white) { described_class.new }
-        let(:pawn_enpassant_white) { Pawn.new([4, 2], 'white') }
-        let(:board) { game_enpassant_white.board }
-
-        before do
-          sample_pawn = Pawn.new([3, 3], 'black')
-          board[3][3] = sample_pawn
-          board[4][2] = pawn_enpassant_white
-          allow(game_enpassant_white).to receive(:ask_load)
-          allow(game_enpassant_white).to receive(:ask_input).and_return('white')
-          allow(game_enpassant_white).to receive(:turn_loop).twice
-          game_enpassant_white.start_game
-          current_player = game_enpassant_white.current_player
-          allow(current_player).to receive(:select_piece).and_return(pawn_enpassant_white)
-          allow(current_player).to receive(:ask_position).and_return([3, 2])
-          allow(game_enpassant_white).to receive(:win?).and_return(true)
-          game_enpassant_white.do_move
-          sample_pawn.save_move(sample_pawn.moves['double_step'], [3,3])
-        end
-
-        it 'moves the piece correctly' do
-          game_enpassant_white.move_piece(pawn_enpassant_white, [2, 3], game_enpassant_white.board, game_enpassant_white.turns)
-          expect(board[2][3]).to be(pawn_enpassant_white)
-        end
-
-        it 'removes the enemy piece' do
-          game_enpassant_white.move_piece(pawn_enpassant_white, [2, 3], game_enpassant_white.board, game_enpassant_white.turns)
-          expect(board[3][3]).to eq(' ')
+          game_enpassant_black.move_piece(pawn_enpassant_black, [5, 5], game_enpassant_black.board,
+                                          game_enpassant_black.turns)
+          expect(board[4][5]).to eq(' ')
         end
       end
 
       context 'when making an en-passant in a real setting' do
         subject(:game_enpassant_real) { described_class.new }
+
         let(:pawn_enpassant_real) { Pawn.new([3, 2], 'white') }
         let(:board) { game_enpassant_real.board }
 
@@ -369,16 +342,17 @@ describe Game do
           allow(game_enpassant_real).to receive(:turn_loop).twice
           game_enpassant_real.start_game
           game_enpassant_real.move_piece(sample_pawn, [3, 3], board)
-          #sample_pawn.save_move(sample_pawn.moves['double_step'], [3,3])
         end
 
         it 'moves the piece correctly' do
-          game_enpassant_real.move_piece(pawn_enpassant_real, [2, 3], game_enpassant_real.board, game_enpassant_real.turns)
+          game_enpassant_real.move_piece(pawn_enpassant_real, [2, 3], game_enpassant_real.board,
+                                         game_enpassant_real.turns)
           expect(board[2][3]).to be(pawn_enpassant_real)
         end
 
         it 'removes the enemy piece' do
-          game_enpassant_real.move_piece(pawn_enpassant_real, [2, 3], game_enpassant_real.board, game_enpassant_real.turns)
+          game_enpassant_real.move_piece(pawn_enpassant_real, [2, 3], game_enpassant_real.board,
+                                         game_enpassant_real.turns)
           expect(board[3][3]).to eq(' ')
         end
       end
@@ -419,10 +393,6 @@ describe Game do
   end
 
   context 'castling' do
-    before do
-      #allow_any_instance_of(Board).to receive(:init_pieces)
-    end
-
     describe '#check_castling' do
       subject(:game_castling) { described_class.new }
 
@@ -432,22 +402,22 @@ describe Game do
         game_castling.start_game
       end
 
-     context 'when doing castling right' do 
-      it 'moves pieces correctly' do
-        current_player = game_castling.current_player
-        king_castling = King.new([7, 4], 'white')
-        rook_castling = Rook.new([7, 7], 'white')
-        game_castling.board[7][4] = king_castling
-        game_castling.board[7][7] = rook_castling
-        game_castling.board[7][5] = ' '
-        game_castling.board[7][6] = ' '      
-        allow(current_player).to receive(:select_piece).and_return(king_castling)
-        allow(current_player).to receive(:ask_position).and_return([7,6])
-        game_castling.do_move
-        expect(game_castling.board[7][6]).to be(king_castling)
-        expect(game_castling.board[7][5]).to be(rook_castling)
+      context 'when doing castling right' do
+        it 'moves pieces correctly' do
+          current_player = game_castling.current_player
+          king_castling = King.new([7, 4], 'white')
+          rook_castling = Rook.new([7, 7], 'white')
+          game_castling.board[7][4] = king_castling
+          game_castling.board[7][7] = rook_castling
+          game_castling.board[7][5] = ' '
+          game_castling.board[7][6] = ' '
+          allow(current_player).to receive(:select_piece).and_return(king_castling)
+          allow(current_player).to receive(:ask_position).and_return([7, 6])
+          game_castling.do_move
+          expect(game_castling.board[7][6]).to be(king_castling)
+          expect(game_castling.board[7][5]).to be(rook_castling)
+        end
       end
-    end
     end
   end
 end
