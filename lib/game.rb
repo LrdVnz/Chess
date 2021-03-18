@@ -42,6 +42,7 @@ class Game < Board
       verify_checkmate
       verify_stalemate
       puts "current player is #{@current_player.color}" unless current_player.nil?
+      print "YAAAA \n\n"
       verify_move
       @won = win?
     end
@@ -102,4 +103,4 @@ class Game < Board
   end
 end
 
-Game.new.start_game
+# Game.new.start_game
