@@ -46,11 +46,11 @@ class Pawn
     moves.each_value do |move|
       result = make_move(move)
 
-      next if result.nil? 
-      
-      next if board[result[0]][result[1]] != ' ' && board[result[0]][result[1]].color == color 
+      next if result.nil?
 
-      all_results << result 
+      next if board[result[0]][result[1]] != ' ' && board[result[0]][result[1]].color == color
+
+      all_results << result
     end
     all_results
   end
@@ -59,6 +59,7 @@ class Pawn
     @goal = goal
     @board = board
     @is_valid = false
+    @prev_pos = position
     moves.each_value do |move|
       @result = make_move(move)
       next if @result.nil?
@@ -72,7 +73,7 @@ class Pawn
   def check_save_move(move, move_cell)
     return unless check_diagonal(@result, @goal, move_cell) != false
 
-    save_move(move)
+    save_move(move, @result)
     @is_valid = true
   end
 

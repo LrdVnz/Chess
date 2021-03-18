@@ -17,14 +17,16 @@ module EnPassant
 
       move_cell = board[result[0]][result[1]]
       if check_diagonal(result, goal, move_cell)
-        @is_valid = { 'name' => 'en_passant', 'enemy_pos' => @previous_move['position'] }
+        @is_valid = { 'name' => 'en_passant', 'enemy_pos' => @previous_move['position'],
+                      'enemy_result' => @previous_move['result'] }
       end
     end
   end
 
-  def save_move(move)
+  def save_move(move, result)
     json = { 'move' => move, 'piece' => itself,
-             'position' => @position, 'color' => color }.to_json
+             'position' => @prev_pos, 'color' => color,
+             'result' => result }.to_json
     File.open("#{@save_move_path}last_pawn_move", 'w') { |f| f << json }
   end
 
@@ -32,15 +34,18 @@ module EnPassant
     move_save = File.read("#{@save_move_path}last_pawn_move")
     data = JSON.parse(move_save)
     @previous_move = { 'move' => data['move'], 'piece' => data['piece'],
-                       'position' => data['position'], 'color' => data['color'] }
+                       'position' => data['position'], 'color' => data['color'],
+                       'result' => data['result'] }
     verify_en_passant(@previous_move, goal)
   end
 
   private
 
   def verify_en_passant(previous_move, goal)
-    return true if verify_move(previous_move) && previous_move['color'] != color &&
-                   verify_previous_pos(previous_move) && verify_goal(goal)
+    return true if verify_move(previous_move) &&
+                   previous_move['color'] != color &&
+                   verify_previous_pos(previous_move) &&
+                   verify_goal(goal)
 
     false
   end
@@ -57,3 +62,23 @@ module EnPassant
     goal == make_move(@moves['eat_right']) || goal == make_move(@moves['eat_left'])
   end
 end
+
+#
+#     print "\n edaverify \n"
+#     print verify_move(previous_move)
+#     print "\n edaprevcolor \n"
+#     print previous_move['color'] != color
+#     print "\n eda prevpos \n"
+#     print verify_previous_pos(previous_move)
+#     print "\n heeefhhhhhhhhhhhhhhhh"
+#
+#     print "\n PERFAVOREEEEEEEE  moves \n"
+#     print @moves
+#     print "\n niaaaa GOAL "
+#     print goal
+#     print "\n ANCORAAAAHAH make MOVE"
+#     print make_move(@moves['eat_right'])
+#     print "\n dippiiii MAKE MVE LEFTs"
+#     print make_move(@moves['eat_left'])
+#     print "\n \n \n"
+#     print goal == make_move(@moves['eat_right']) || goal == make_move(@moves['eat_left'])

@@ -294,54 +294,92 @@ describe Game do
   end
 
   context 'en-passant' do
-    before do
-      allow_any_instance_of(Board).to receive(:init_pieces)
-    end
-
     describe '#move_piece' do
-      subject(:game_enpassant) { described_class.new }
-
-      let(:board) { game_enpassant.board }
-
-      context 'when making an en passant move' do
-        let(:pawn_enpassant) { Pawn.new([4, 2], 'black') }
+      context 'when making an en passant move with black' do
+        subject(:game_enpassant_black) { described_class.new }
+        let(:board) { game_enpassant_black.board }
+    
+        let(:pawn_enpassant_black) { Pawn.new([4, 2], 'black') }
 
         before do
+          allow(game_enpassant_black).to receive(:ask_load)
+          allow(game_enpassant_black).to receive(:ask_input).and_return('black')
+          allow(game_enpassant_black).to receive(:turn_loop)
+          game_enpassant_black.start_game
           sample_pawn = Pawn.new([4, 3], 'white')
           board[4][3] = sample_pawn
-          board[4][2] = pawn_enpassant
-          sample_pawn.save_move(sample_pawn.moves['double_step'])
+          board[4][2] = pawn_enpassant_black
+          sample_pawn.save_move(sample_pawn.moves['double_step'], [4,3])
         end
 
         it 'moves the piece correctly' do
-          game_enpassant.move_piece(pawn_enpassant, [5, 3], game_enpassant.board, game_enpassant.turns)
-          expect(board[5][3]).to be(pawn_enpassant)
+          game_enpassant_black.move_piece(pawn_enpassant_black, [5, 3], game_enpassant_black.board, game_enpassant_black.turns)
+          expect(board[5][3]).to be(pawn_enpassant_black)
         end
 
         it 'removes the enemy piece' do
-          game_enpassant.move_piece(pawn_enpassant, [5, 3], game_enpassant.board, game_enpassant.turns)
+          game_enpassant_black.move_piece(pawn_enpassant_black, [5, 3], game_enpassant_black.board, game_enpassant_black.turns)
           expect(board[4][3]).to eq(' ')
         end
       end
 
       context 'when making an en passant move with white' do
-        let(:pawn_enpassant) { Pawn.new([4, 2], 'white') }
+        subject(:game_enpassant_white) { described_class.new }
+        let(:pawn_enpassant_white) { Pawn.new([4, 2], 'white') }
+        let(:board) { game_enpassant_white.board }
 
         before do
-          sample_pawn = Pawn.new([4, 3], 'black')
-          board[4][3] = sample_pawn
-          board[4][2] = pawn_enpassant
-          sample_pawn.save_move(sample_pawn.moves['double_step'])
+          sample_pawn = Pawn.new([3, 3], 'black')
+          board[3][3] = sample_pawn
+          board[4][2] = pawn_enpassant_white
+          allow(game_enpassant_white).to receive(:ask_load)
+          allow(game_enpassant_white).to receive(:ask_input).and_return('white')
+          allow(game_enpassant_white).to receive(:turn_loop).twice
+          game_enpassant_white.start_game
+          current_player = game_enpassant_white.current_player
+          allow(current_player).to receive(:select_piece).and_return(pawn_enpassant_white)
+          allow(current_player).to receive(:ask_position).and_return([3, 2])
+          allow(game_enpassant_white).to receive(:win?).and_return(true)
+          game_enpassant_white.do_move
+          sample_pawn.save_move(sample_pawn.moves['double_step'], [3,3])
         end
 
         it 'moves the piece correctly' do
-          game_enpassant.move_piece(pawn_enpassant, [3, 3], game_enpassant.board, game_enpassant.turns)
-          expect(board[3][3]).to be(pawn_enpassant)
+          game_enpassant_white.move_piece(pawn_enpassant_white, [2, 3], game_enpassant_white.board, game_enpassant_white.turns)
+          expect(board[2][3]).to be(pawn_enpassant_white)
         end
 
         it 'removes the enemy piece' do
-          game_enpassant.move_piece(pawn_enpassant, [3, 3], game_enpassant.board, game_enpassant.turns)
-          expect(board[4][3]).to eq(' ')
+          game_enpassant_white.move_piece(pawn_enpassant_white, [2, 3], game_enpassant_white.board, game_enpassant_white.turns)
+          expect(board[3][3]).to eq(' ')
+        end
+      end
+
+      context 'when making an en-passant in a real setting' do
+        subject(:game_enpassant_real) { described_class.new }
+        let(:pawn_enpassant_real) { Pawn.new([3, 2], 'white') }
+        let(:board) { game_enpassant_real.board }
+
+        before do
+          sample_pawn = Pawn.new([1, 3], 'black')
+          board[1][3] = sample_pawn
+          board[3][2] = pawn_enpassant_real
+          allow(game_enpassant_real).to receive(:ask_load)
+          allow(game_enpassant_real).to receive(:ask_input).and_return('white')
+          allow(game_enpassant_real).to receive(:turn_loop).twice
+          game_enpassant_real.start_game
+          game_enpassant_real.move_piece(sample_pawn, [3, 3], board)
+          sample_pawn.save_move(sample_pawn.moves['double_step'], [3,3])
+        end
+
+        it 'moves the piece correctly' do
+          game_enpassant_real.move_piece(pawn_enpassant_real, [2, 3], game_enpassant_real.board, game_enpassant_real.turns)
+          expect(board[2][3]).to be(pawn_enpassant_real)
+        end
+
+        it 'removes the enemy piece' do
+          game_enpassant_real.move_piece(pawn_enpassant_real, [2, 3], game_enpassant_real.board, game_enpassant_real.turns)
+          expect(board[3][3]).to eq(' ')
         end
       end
     end
@@ -401,7 +439,6 @@ describe Game do
 
       it 'moves pieces correctly' do
         game_castling.board[7][7] = rook_castling
-        # game_castling.showboard
         game_castling.check_castling(king_castling, [7, 6])
         expect(game_castling.board[7][6]).to be(king_castling)
         expect(game_castling.board[7][5]).to be(rook_castling)

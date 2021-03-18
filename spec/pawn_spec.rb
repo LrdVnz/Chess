@@ -91,7 +91,7 @@ describe Pawn do
     context 'when saving the move' do
       it 'saves and overwrites the file' do
         double_step = pawn_save.moves['double_step']
-        pawn_save.save_move(double_step)
+        pawn_save.save_move(double_step, [1,2])
         expect(File).to exist("#{pawn_save.save_move_path}last_pawn_move")
       end
     end
@@ -103,7 +103,7 @@ describe Pawn do
     context 'when loading a move' do
       it 'loads correctly' do
         sample_pawn = described_class.new([6, 3], 'white')
-        sample_pawn.save_move(sample_pawn.moves['double_step'])
+        sample_pawn.save_move(sample_pawn.moves['double_step'] ,[6,3])
         pawn_load.load_move([4, 3])
         previous_move = pawn_load.instance_variable_get(:@previous_move)
         expect(previous_move['color']).to eq('white')
@@ -125,7 +125,7 @@ describe Pawn do
         sample_pawn = described_class.new([6, 3], 'white')
         board[6][3] = sample_pawn
         board[4][2] = pawn_enpassant
-        sample_pawn.save_move(sample_pawn.moves['double_step'])
+        sample_pawn.save_move(sample_pawn.moves['double_step'], [6,3])
       end
 
       it 'returns true' do

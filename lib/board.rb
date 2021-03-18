@@ -96,6 +96,7 @@ class Board
   def checked_en_passant(piece, move_checked, goal)
     reset_cell(piece.position)
     reset_cell(move_checked['enemy_pos'])
+    reset_cell(move_checked['enemy_result'])
     piece.position = goal
     insert_piece(piece, goal[0], goal[1])
   end
