@@ -36,6 +36,7 @@ module EnPassant
     @previous_move = { 'move' => data['move'], 'piece' => data['piece'],
                        'position' => data['position'], 'color' => data['color'],
                        'result' => data['result'] }
+                       
     verify_en_passant(@previous_move, goal)
   end
 
@@ -55,6 +56,7 @@ module EnPassant
   end
 
   def verify_previous_pos(previous_move)
+    return if previous_move['position'].nil? 
     previous_move['position'][1] == position[1] + 1 || previous_move['position'][1] == position[1] - 1
   end
 

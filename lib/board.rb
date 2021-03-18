@@ -2,14 +2,12 @@
 
 project_root = File.dirname(File.absolute_path(__FILE__))
 Dir.glob("#{project_root}/pieces/*.rb").sort.each { |file| require file }
-require_relative 'pieces/helpers/castling_helper'
 require_relative 'pieces/helpers/verify_checkmate_module'
 require_relative 'pieces/helpers/board_init_helper'
 
 # Board class. Holds graphical represantion, functions to handle pieces
 class Board
   include VerifyCheckmate
-  include CastlingHelper
   include BoardInit
   attr_accessor :board, :winner
 
@@ -42,19 +40,23 @@ class Board
   end
 
   def move_piece(piece, goal, passed_board, turns = 1)
-    move_checked = piece.check_move(goal, passed_board, turns)
-    if move_checked == true
-      check_all_moves(piece, goal)
-    elsif move_checked == false
-      puts 'Invalid move!'
-      false
-    elsif move_checked['name'] == 'en_passant'
-      checked_en_passant(piece, move_checked, goal)
+    move_checked = nil
+    if piece.instance_of?(King) && check_castling(piece, goal) == true
+      check_castling(piece, goal)
+    else
+      move_checked = piece.check_move(goal, passed_board, turns)
+      if move_checked == true
+        check_all_moves(piece, goal)
+      elsif move_checked == false
+        puts 'Invalid move!'
+        false
+      elsif move_checked['name'] == 'en_passant'
+        checked_en_passant(piece, move_checked, goal)
+      end
     end
   end
 
   def check_all_moves(piece, goal)
-    check_castling(piece, goal)
     check_promote(piece, goal)
     checked_true(piece, goal)
   end

@@ -369,7 +369,7 @@ describe Game do
           allow(game_enpassant_real).to receive(:turn_loop).twice
           game_enpassant_real.start_game
           game_enpassant_real.move_piece(sample_pawn, [3, 3], board)
-          sample_pawn.save_move(sample_pawn.moves['double_step'], [3,3])
+          #sample_pawn.save_move(sample_pawn.moves['double_step'], [3,3])
         end
 
         it 'moves the piece correctly' do
@@ -420,14 +420,11 @@ describe Game do
 
   context 'castling' do
     before do
-      allow_any_instance_of(Board).to receive(:init_pieces)
+      #allow_any_instance_of(Board).to receive(:init_pieces)
     end
 
     describe '#check_castling' do
       subject(:game_castling) { described_class.new }
-
-      let(:king_castling) { King.new([7, 4], 'white') }
-      let(:rook_castling) { Rook.new([7, 7], 'white') }
 
       before do
         allow(game_castling).to receive(:ask_input).and_return('white')
@@ -435,14 +432,22 @@ describe Game do
         game_castling.start_game
       end
 
-      context 'when doing castling right'
-
+     context 'when doing castling right' do 
       it 'moves pieces correctly' do
+        current_player = game_castling.current_player
+        king_castling = King.new([7, 4], 'white')
+        rook_castling = Rook.new([7, 7], 'white')
+        game_castling.board[7][4] = king_castling
         game_castling.board[7][7] = rook_castling
-        game_castling.check_castling(king_castling, [7, 6])
+        game_castling.board[7][5] = ' '
+        game_castling.board[7][6] = ' '      
+        allow(current_player).to receive(:select_piece).and_return(king_castling)
+        allow(current_player).to receive(:ask_position).and_return([7,6])
+        game_castling.do_move
         expect(game_castling.board[7][6]).to be(king_castling)
         expect(game_castling.board[7][5]).to be(rook_castling)
       end
+    end
     end
   end
 end

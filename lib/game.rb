@@ -5,11 +5,13 @@ require_relative 'player'
 require_relative 'pieces/helpers/game_save_module'
 require_relative 'pieces/helpers/verify_checkmate_module'
 require_relative 'pieces/helpers/verify_stalemate_module'
+require_relative 'pieces/helpers/castling_helper'
 
 # main game script
 class Game < Board
   include VerifyCheckmate
   include VerifyStalemate
+  include CastlingHelper
   include SaveGame
   attr_accessor :winner, :won, :enemy, :turns, :current_player
   attr_reader :board, :p1, :p2, :saves_path
@@ -100,4 +102,4 @@ class Game < Board
   end
 end
 
-Game.new.start_game
+# Game.new.start_game

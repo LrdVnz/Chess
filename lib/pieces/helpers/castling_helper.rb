@@ -6,7 +6,7 @@ module CastlingHelper
     @piece = piece
     @goal = goal
     @rook = nil
-    return unless @piece.instance_of?(King) && @piece.moves_made.zero?
+    return false unless @piece.instance_of?(King) && @piece.moves_made.zero?
 
     castling_side
   end
@@ -54,6 +54,7 @@ module CastlingHelper
     reset_king_cell
     put_king
     put_rook
+    true
   end
 
   def reset_king_cell

@@ -6,7 +6,7 @@ require_relative 'helpers/pieces_helpers'
 class King
   include Helpers
   attr_reader :moves, :color
-  attr_accessor :position, :moves_made
+  attr_accessor :position, :moves_made, :board
 
   def initialize(position, color)
     @position = position
