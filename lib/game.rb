@@ -23,8 +23,8 @@ class Game < Board
     @turns = 1
     @board = super
     @current_player = nil
-    @saves_path = '/home/vincenzo/Documenti/Development/Ruby/Chess/saves/'
-  end
+    @saves_path = Dir.pwd + "/saves/"
+  end   
 
   def start_game
     ask_load
@@ -42,7 +42,6 @@ class Game < Board
       verify_checkmate
       verify_stalemate
       puts "current player is #{@current_player.color}" unless current_player.nil?
-      print "YAAAA \n\n"
       verify_move
       @won = win?
     end

@@ -62,23 +62,23 @@ describe Game do
     end
   end
 
+  
   describe '#turn_loop' do
     subject(:game_turn) { described_class.new }
 
     let(:turns_start) { game_turn.turns }
+    let(:p1) { Player.new('white') }
+    let(:p2) { Player.new('black') }
 
     context 'when making an invalid move' do
       before do
-        allow(game_turn).to receive(:ask_load)
-        allow(game_turn).to receive(:puts)
-        allow(game_turn).to receive(:ask_input).and_return('white')
-        game_turn.start_game
-        p1 = game_turn.p1
-        allow(p1).to receive(:do_move).and_return(false, true)
-        allow(game_turn.board).to receive(:showboard)
+        game_turn.instance_variable_set(:@current_player, p1)
+        game_turn.instance_variable_set(:@p1, p1)
+        game_turn.instance_variable_set(:@p2, p2)
+        allow_any_instance_of(Player).to receive(:do_move).and_return(false, true)
+        allow_any_instance_of(Board).to receive(:showboard)
         allow(game_turn).to receive(:do_move).and_return(false)
         allow(game_turn).to receive(:verify_checkmate)
-        allow(game_turn).to receive(:verify_stalemate)
         allow(game_turn).to receive(:win?).and_return(false, true)
       end
 
@@ -109,7 +109,7 @@ describe Game do
       end
     end
   end
-
+  
   describe '#get_enemy_pieces' do
     subject(:game_get_enemy) { described_class.new }
 
